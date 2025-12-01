@@ -55,7 +55,7 @@ public class MainView extends JFrame {
         nhanVienView = new NhanVienView(); // Tạo panel nhân viên từ class riêng
         
         pnlContent.add(createTrangChuPanel(), "Trang chủ");
-        pnlContent.add(nhanVienView, "Nhân viên"); // Add NhanVienView vào
+        pnlContent.add(nhanVienView, "Nhân viên"); 
         pnlContent.add(createPlaceholderPanel("Quản lý Khách hàng"), "Khách hàng");
         pnlContent.add(createPlaceholderPanel("Quản lý Thực đơn"), "Thực đơn");
         pnlContent.add(createPlaceholderPanel("Quản lý Hóa đơn"), "Hóa đơn");

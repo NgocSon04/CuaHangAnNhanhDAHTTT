@@ -8,6 +8,7 @@ import vn.CH.controller.NhanVienController;
 import vn.CH.view.MainView;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import vn.CH.controller.KhachHangController;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,6 +26,7 @@ public class Main {
             // 2. Lấy Panel Nhân Viên ra từ MainView
             // 3. Gắn Panel đó vào Controller để xử lý logic
             new NhanVienController(mainView.getNhanVienView());
+            new KhachHangController(mainView.getKhachHangView());
             
             mainView.setVisible(true);
         });

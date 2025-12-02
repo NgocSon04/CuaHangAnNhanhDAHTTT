@@ -23,7 +23,7 @@ public class NhanVienView extends JPanel {
     private ButtonGroup btnGroupGender;
     private JTable tableNhanVien;
     private DefaultTableModel tableModel;
-    private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy, btnReset, btnTimKiem;
+    private JButton btnThem, btnSua, btnXoa, btnReset, btnTimKiem;
 
     public NhanVienView() {
         setLayout(new BorderLayout());
@@ -96,10 +96,8 @@ public class NhanVienView extends JPanel {
         // Buttons
         JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         pnlButtons.setBackground(TEAL_COLOR);
-        btnThem = createStyledButton("Thêm"); btnSua = createStyledButton("Sửa"); btnXoa = createStyledButton("Xóa");
-        btnLuu = createStyledButton("Lưu"); btnHuy = createStyledButton("Hủy"); btnReset = createStyledButton("RESET");
-        pnlButtons.add(btnThem); pnlButtons.add(btnSua); pnlButtons.add(btnXoa);
-        pnlButtons.add(btnLuu); pnlButtons.add(btnHuy); pnlButtons.add(btnReset);
+        btnThem = createStyledButton("Thêm"); btnSua = createStyledButton("Sửa"); btnXoa = createStyledButton("Xóa"); btnReset = createStyledButton("RESET");
+        pnlButtons.add(btnThem); pnlButtons.add(btnSua); pnlButtons.add(btnXoa); pnlButtons.add(btnReset);
         pnlFormContainer.add(pnlButtons);
 
         // Search

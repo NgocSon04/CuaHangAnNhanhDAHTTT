@@ -19,7 +19,7 @@ public class KhachHangView extends JPanel {
     private ButtonGroup btnGroupGender;
     private JTable tableKhachHang;
     private DefaultTableModel tableModel;
-    private JButton btnThem, btnSua, btnXoa, btnLuu, btnHuy, btnReset, btnTimKiem;
+    private JButton btnThem, btnSua, btnXoa, btnReset, btnTimKiem;
 
     public KhachHangView() {
         setLayout(new BorderLayout());
@@ -90,9 +90,9 @@ public class KhachHangView extends JPanel {
         JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         pnlButtons.setBackground(TEAL_COLOR);
         btnThem = createStyledButton("Thêm"); btnSua = createStyledButton("Sửa"); btnXoa = createStyledButton("Xóa");
-        btnLuu = createStyledButton("Lưu"); btnHuy = createStyledButton("Hủy"); btnReset = createStyledButton("RESET");
+        btnReset = createStyledButton("RESET");
         pnlButtons.add(btnThem); pnlButtons.add(btnSua); pnlButtons.add(btnXoa);
-        pnlButtons.add(btnLuu); pnlButtons.add(btnHuy); pnlButtons.add(btnReset);
+        pnlButtons.add(btnReset);
         pnlFormContainer.add(pnlButtons);
 
         // Search

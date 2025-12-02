@@ -20,6 +20,7 @@ public class MainView extends JFrame {
 
     // Các View Con (Khai báo ở đây để lấy ra khi cần)
     private NhanVienView nhanVienView;
+    private KhachHangView khachHangView;
 
     public MainView() {
         setTitle("Hệ Thống Quản Lý Cửa Hàng Đồ Ăn Nhanh");
@@ -53,10 +54,11 @@ public class MainView extends JFrame {
         
         // --- KHỞI TẠO CÁC VIEW CON ---
         nhanVienView = new NhanVienView(); // Tạo panel nhân viên từ class riêng
+        khachHangView = new KhachHangView();
         
         pnlContent.add(createTrangChuPanel(), "Trang chủ");
         pnlContent.add(nhanVienView, "Nhân viên"); 
-        pnlContent.add(createPlaceholderPanel("Quản lý Khách hàng"), "Khách hàng");
+        pnlContent.add(khachHangView, "Khách hàng");
         pnlContent.add(createPlaceholderPanel("Quản lý Thực đơn"), "Thực đơn");
         pnlContent.add(createPlaceholderPanel("Quản lý Hóa đơn"), "Hóa đơn");
         pnlContent.add(createPlaceholderPanel("Quản lý Kho"), "Kho");
@@ -100,6 +102,10 @@ public class MainView extends JFrame {
     public NhanVienView getNhanVienView() {
         return nhanVienView;
     }
+    public KhachHangView getKhachHangView(){
+        return khachHangView;
+    }
+    
 
     // --- Helper methods cho Sidebar ---
     private JPanel createTrangChuPanel() {

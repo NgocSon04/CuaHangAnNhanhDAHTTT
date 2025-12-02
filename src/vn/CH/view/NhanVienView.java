@@ -148,7 +148,6 @@ public class NhanVienView extends JPanel {
     public NhanVien getNhanVienInfo() {
         String gt = rdoNam.isSelected() ? "Nam" : "Nữ";
         
-        // Lấy ngày từ JDateChooser và chuyển thành chuỗi String để lưu vào Model
         String strNgaySinh = "";
         if (txtNgaySinh.getDate() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -189,10 +188,18 @@ public class NhanVienView extends JPanel {
         btnGroupGender.clearSelection();
     }
     
-    public JTable getTable() { return tableNhanVien; }
-    public void clearTable() { tableModel.setRowCount(0); }
-    public void addRowToTable(NhanVien nv) { tableModel.addRow(nv.toObjectArray()); }
-    public int getSelectedRow() { return tableNhanVien.getSelectedRow(); }
+    public JTable getTable() { 
+        return tableNhanVien; 
+    }
+    public void clearTable() { 
+        tableModel.setRowCount(0); 
+    }
+    public void addRowToTable(NhanVien nv) { 
+        tableModel.addRow(nv.toObjectArray()); 
+    }
+    public int getSelectedRow() { 
+        return tableNhanVien.getSelectedRow(); 
+    }
     public void updateRowInTable(NhanVien nv, int row) {
         tableModel.setValueAt(nv.getMaNV(), row, 0); tableModel.setValueAt(nv.getTenNV(), row, 1);
         tableModel.setValueAt(nv.getNgaySinh(), row, 2); tableModel.setValueAt(nv.getGioiTinh(), row, 3);

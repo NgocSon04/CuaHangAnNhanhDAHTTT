@@ -118,7 +118,16 @@ public class DBConnection {
                     + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
             dbStmt.executeUpdate(sqlCreateThucDon);
             System.out.println("Da Kiem tra/ Tao bang ThucDon.");
+            // 9. Tạo bảng Users
+            String sqlCreateUsers = "CREATE TABLE IF NOT EXISTS Users ("
+                    + "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                    + "username VARCHAR(50) NOT NULL UNIQUE,"
+                    + "password VARCHAR(50) NOT NULL,"
+                    + "role ENUM('ADMIN', 'NHÂN VIÊN') DEFAULT NULL"
+                    + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;";
 
+            dbStmt.executeUpdate(sqlCreateUsers);
+            System.out.println("Đã kiểm tra/ Tạo bảng Users.");
 
             // (Optional) Tạo thêm các bảng khác ở đây nếu cần (Khách hàng, Hóa đơn...)
             

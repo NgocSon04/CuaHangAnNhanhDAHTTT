@@ -14,6 +14,11 @@ public class ChiTietHoaDon {
     }
 
     public Object[] toObjectArray() {
-        return new Object[]{tenMon, soLuong, String.format("%,.0f", donGia), String.format("%,.0f", thanhTien)};
+        return new Object[]{
+            tenMon, 
+            soLuong, 
+            String.format("%,.0f", donGia), 
+            String.format("%,.0f", thanhTien)
+        };
     }
 }

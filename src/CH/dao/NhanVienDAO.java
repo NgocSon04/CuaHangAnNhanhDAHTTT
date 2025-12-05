@@ -9,14 +9,17 @@ import java.util.List;
 
 public class NhanVienDAO {
 
-    // Lấy toàn bộ danh sách nhân viên
+    // 1. Lấy danh sách nhân viên (Bao gồm cả Username, Role)
     public List<NhanVien> getAll() {
         List<NhanVien> list = new ArrayList<>();
+        // Sắp xếp theo MaNV giảm dần để thấy nhân viên mới nhất ở trên
+        String sql = "SELECT * FROM NhanVien ORDER BY MaNV DESC"; 
+
         try {
             Connection cons = DBConnection.getConnection();
-            String sql = "SELECT * FROM NhanVien";
             PreparedStatement ps = cons.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 NhanVien nv = new NhanVien();
                 nv.setMaNV(rs.getString("MaNV"));
@@ -26,6 +29,10 @@ public class NhanVienDAO {
                 nv.setChucVu(rs.getString("ChucVu"));
                 nv.setSoDienThoai(rs.getString("SoDienThoai"));
                 nv.setDiaChi(rs.getString("DiaChi"));
+                nv.setUsername(rs.getString("Username"));
+                nv.setPassword(rs.getString("Password"));
+                nv.setRole(rs.getString("Role"));
+
                 list.add(nv);
             }
             ps.close();
@@ -36,12 +43,14 @@ public class NhanVienDAO {
         return list;
     }
 
-    // Thêm nhân viên
+    // 2. Thêm nhân viên mới (Cập nhật SQL đủ 10 tham số)
     public boolean add(NhanVien nv) {
+        String sql = "INSERT INTO NhanVien(MaNV, TenNV, NgaySinh, GioiTinh, ChucVu, SoDienThoai, DiaChi, Username, Password, Role) " +
+                     "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             Connection cons = DBConnection.getConnection();
-            String sql = "INSERT INTO NhanVien(MaNV, TenNV, NgaySinh, GioiTinh, ChucVu, SoDienThoai, DiaChi) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = cons.prepareStatement(sql);
+
             ps.setString(1, nv.getMaNV());
             ps.setString(2, nv.getTenNV());
             ps.setString(3, nv.getNgaySinh());
@@ -50,6 +59,11 @@ public class NhanVienDAO {
             ps.setString(6, nv.getSoDienThoai());
             ps.setString(7, nv.getDiaChi());
             
+            // --- Lưu Tài khoản, Mật khẩu, Quyền ---
+            ps.setString(8, nv.getUsername());
+            ps.setString(9, nv.getPassword()); // Nếu view chưa có ô nhập pass, Controller nên set mặc định là "123"
+            ps.setString(10, nv.getRole());
+
             int row = ps.executeUpdate();
             ps.close();
             cons.close();
@@ -60,19 +74,29 @@ public class NhanVienDAO {
         }
     }
 
-    // Sửa nhân viên
+    // 3. Cập nhật thông tin (Bao gồm cập nhật cả Quyền và Pass nếu cần)
     public boolean update(NhanVien nv) {
+
+        // Thêm "Password=?" vào câu lệnh SQL
+        String sql = "UPDATE NhanVien SET TenNV=?, NgaySinh=?, GioiTinh=?, ChucVu=?, SoDienThoai=?, DiaChi=?, Username=?, Role=?, Password=? WHERE MaNV=?";
+        
         try {
             Connection cons = DBConnection.getConnection();
-            String sql = "UPDATE NhanVien SET TenNV=?, NgaySinh=?, GioiTinh=?, ChucVu=?, SoDienThoai=?, DiaChi=? WHERE MaNV=?";
             PreparedStatement ps = cons.prepareStatement(sql);
+
             ps.setString(1, nv.getTenNV());
             ps.setString(2, nv.getNgaySinh());
             ps.setString(3, nv.getGioiTinh());
             ps.setString(4, nv.getChucVu());
             ps.setString(5, nv.getSoDienThoai());
             ps.setString(6, nv.getDiaChi());
-            ps.setString(7, nv.getMaNV());
+            ps.setString(7, nv.getUsername());
+            ps.setString(8, nv.getRole());
+            
+            ps.setString(9, nv.getPassword()); 
+            
+            // Điều kiện WHERE
+            ps.setString(10, nv.getMaNV());
 
             int row = ps.executeUpdate();
             ps.close();
@@ -84,11 +108,11 @@ public class NhanVienDAO {
         }
     }
 
-    // Xóa nhân viên
+    // 4. Xóa nhân viên
     public boolean delete(String maNV) {
+        String sql = "DELETE FROM NhanVien WHERE MaNV=?";
         try {
             Connection cons = DBConnection.getConnection();
-            String sql = "DELETE FROM NhanVien WHERE MaNV=?";
             PreparedStatement ps = cons.prepareStatement(sql);
             ps.setString(1, maNV);
             
@@ -101,27 +125,21 @@ public class NhanVienDAO {
             return false;
         }
     }
-    // Hàm sinh mã tự động
+    
+    // 5. Hàm sinh mã tự động (NV01, NV02...)
     public String getNewID() {
-        String newID = "NV001"; // Mặc định nếu bảng trống
+        String newID = "NV01";
         try {
             Connection cons = DBConnection.getConnection();
-            // Lấy mã nhân viên cuối cùng (Sắp xếp giảm dần và lấy 1 cái đầu tiên)
-            String sql = "SELECT MaNV FROM NhanVien ORDER BY MaNV DESC LIMIT 1";
+            String sql = "SELECT MAX(MaNV) FROM NhanVien";
             PreparedStatement ps = cons.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            
             if (rs.next()) {
-                String lastID = rs.getString("MaNV"); // Ví dụ: NV005
-                // Cắt chuỗi để lấy phần số: "005" -> 5
-                String prefix = lastID.substring(0, 2); // "NV"
-                String numberPart = lastID.substring(2); // "005"
-                
-                int number = Integer.parseInt(numberPart);
-                number++; // Tăng lên 1 -> 6
-                
-                // Format lại thành chuỗi 3 chữ số (ví dụ 6 -> "006")
-                newID = prefix + String.format("%03d", number);
+                String maxID = rs.getString(1);
+                if (maxID != null) {
+                    int so = Integer.parseInt(maxID.substring(2)) + 1;
+                    newID = String.format("NV%02d", so);
+                }
             }
             ps.close();
             cons.close();

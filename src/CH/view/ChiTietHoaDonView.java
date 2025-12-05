@@ -69,8 +69,19 @@ public class ChiTietHoaDonView extends JDialog {
         lblTongTien.setText("Tổng tiền: " + String.format("%,.0f VNĐ", tongTien));
 
         tableModel.setRowCount(0);
+        double tongTienTinhToan = 0;
         for (ChiTietHoaDon item : listChiTiet) {
             tableModel.addRow(item.toObjectArray());
+            Object[] rowData = item.toObjectArray();
+            String thanhTienStr = rowData[3].toString().replace(",", "").replace(".", "");
+            try {
+                tongTienTinhToan += Double.parseDouble(thanhTienStr);
+                
+            }catch (Exception e){
+                
+            }
         }
+        lblTongTien.setText("Tổng tiền: " + String.format("%,.0f VNĐ", tongTienTinhToan));
     }
+
 }

@@ -59,17 +59,20 @@ public class DBConnection {
             Statement dbStmt = dbConn.createStatement();
 
             // 4. Tạo bảng NhanVien nếu chưa tồn tại
-            String sqlCreateTable = "CREATE TABLE IF NOT EXISTS NhanVien ("
+            String sqlCreateNhanVien = "CREATE TABLE IF NOT EXISTS NhanVien ("
                     + "MaNV VARCHAR(20) NOT NULL PRIMARY KEY,"
                     + "TenNV VARCHAR(100) NOT NULL,"
                     + "NgaySinh VARCHAR(20),"
                     + "GioiTinh VARCHAR(10),"
                     + "ChucVu VARCHAR(50),"
                     + "SoDienThoai VARCHAR(15),"
-                    + "DiaChi VARCHAR(255)"
+                    + "DiaChi VARCHAR(255),"
+                    + "Username VARCHAR(50),"  
+                    + "Password VARCHAR(50),"  
+                    + "Role VARCHAR(20)"        
                     + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
             
-            dbStmt.executeUpdate(sqlCreateTable);
+            dbStmt.executeUpdate(sqlCreateNhanVien);
             System.out.println("Da Kiem tra/ Tao bang NhanVien.");
             
             // 4. Tạo bảng KhachHang nếu chưa tồn tại [MỚI THÊM]
@@ -89,8 +92,8 @@ public class DBConnection {
             // 6. Tạo bảng HoaDon [MỚI]
             String sqlCreateHoaDon = "CREATE TABLE IF NOT EXISTS HoaDon ("
                     + "MaHD VARCHAR(20) NOT NULL PRIMARY KEY,"
-                    + "TenNV VARCHAR(100)," // Lưu tên cho nhanh (thực tế nên lưu MaNV)
-                    + "TenKH VARCHAR(100)," // Lưu tên cho nhanh (thực tế nên lưu MaKH)
+                    + "TenNV VARCHAR(100)," 
+                    + "TenKH VARCHAR(100)," 
                     + "NgayLap VARCHAR(20),"
                     + "TongTien DOUBLE"
                     + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
@@ -118,16 +121,7 @@ public class DBConnection {
                     + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
             dbStmt.executeUpdate(sqlCreateThucDon);
             System.out.println("Da Kiem tra/ Tao bang ThucDon.");
-            // 9. Tạo bảng Users
-            String sqlCreateUsers = "CREATE TABLE IF NOT EXISTS Users ("
-                    + "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-                    + "username VARCHAR(50) NOT NULL UNIQUE,"
-                    + "password VARCHAR(50) NOT NULL,"
-                    + "role ENUM('ADMIN', 'NHÂN VIÊN') DEFAULT NULL"
-                    + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;";
-
-            dbStmt.executeUpdate(sqlCreateUsers);
-            System.out.println("Đã kiểm tra/ Tạo bảng Users.");
+           
 
             // (Optional) Tạo thêm các bảng khác ở đây nếu cần (Khách hàng, Hóa đơn...)
             

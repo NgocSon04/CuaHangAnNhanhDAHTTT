@@ -67,7 +67,7 @@ public class HoaDonDAO {
             ps.setString(2, hd.getTenNV());
             ps.setString(3, hd.getTenKH());
             ps.setString(4, hd.getNgayLap());
-            ps.setDouble(5, 0.0); // Mặc định tổng tiền = 0 khi mới tạo
+            ps.setDouble(5, hd.getTongTien()); // Mặc định tổng tiền = 0 khi mới tạo
             
             int row = ps.executeUpdate();
             ps.close();

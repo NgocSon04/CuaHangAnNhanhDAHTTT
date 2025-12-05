@@ -2,7 +2,6 @@ package CH.view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -24,6 +23,11 @@ public class NhanVienView extends JPanel {
     private JTable tableNhanVien;
     private DefaultTableModel tableModel;
     private JButton btnThem, btnSua, btnXoa, btnReset, btnTimKiem;
+    
+    // Components cho tài khoản
+    private JTextField txtUsername;
+    private JPasswordField txtPassword;
+    private JComboBox<String> cboRole;
 
     public NhanVienView() {
         setLayout(new BorderLayout());
@@ -32,100 +36,94 @@ public class NhanVienView extends JPanel {
 
     private void initUI() {
         // 1. Form Area
-        JPanel pnlFormContainer = new JPanel();
-        pnlFormContainer.setLayout(new BoxLayout(pnlFormContainer, BoxLayout.Y_AXIS));
-        pnlFormContainer.setBackground(TEAL_COLOR);
-        pnlFormContainer.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-        JLabel lblFormTitle = new JLabel("Thông tin nhân viên");
-        lblFormTitle.setForeground(Color.WHITE);
-        lblFormTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        lblFormTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        pnlFormContainer.add(lblFormTitle);
-        pnlFormContainer.add(Box.createRigidArea(new Dimension(0, 20)));
-
         JPanel pnlForm = new JPanel(new GridBagLayout());
         pnlForm.setBackground(TEAL_COLOR);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(5, 10, 5, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        addFormRow(pnlForm, gbc, 0, "Mã nhân viên", txtMaNV = new JTextField(15));
-        txtMaNV.setEditable(false); // Không cho nhập tay
-        txtMaNV.setBackground(new Color(230, 230, 230)); // Đổi màu xám nhẹ để biết là read-only
-        txtMaNV.setText("Tự động sinh"); // Giá trị mặc định
-        
-        addFormRow(pnlForm, gbc, 2, "Tên nhân viên", txtTenNV = new JTextField(15));
-        
-        gbc.gridx = 4; gbc.weightx = 0; gbc.fill = GridBagConstraints.BOTH;
-        JLabel lblNgaySinh = new JLabel("Ngày sinh"); lblNgaySinh.setForeground(Color.WHITE);
-        pnlForm.add(lblNgaySinh, gbc);
-        gbc.gridx = 5; gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
-        txtNgaySinh = new JDateChooser(); 
-        txtNgaySinh.setDateFormatString("dd/MM/yyyy"); // Định dạng ngày Việt Nam
-        txtNgaySinh.setPreferredSize(new Dimension(150, 25));
-        pnlForm.add(txtNgaySinh, gbc);
-        gbc.weightx = 0;
-        
-        addFormRow(pnlForm, gbc, 6, "Chức vụ", txtChucVu = new JTextField(15));
+        // Dòng 1: Mã - Tên
+        addFormRow(pnlForm, gbc, 0, 0, "Mã nhân viên", txtMaNV = new JTextField(15));
+        txtMaNV.setEditable(false); txtMaNV.setText("Tự động sinh");
+        addFormRow(pnlForm, gbc, 2, 0, "Tên nhân viên", txtTenNV = new JTextField(15));
 
-        // Row 2: Giới tính
+        // Dòng 2: Ngày sinh - Giới tính
         gbc.gridy = 1; 
-        
         gbc.gridx = 0; gbc.weightx = 0;
-        JLabel lblGender = new JLabel("Giới tính");
-        lblGender.setForeground(Color.WHITE);
-        pnlForm.add(lblGender, gbc);
+        JLabel lblNgaySinh = new JLabel("Ngày sinh"); lblNgaySinh.setForeground(Color.WHITE); pnlForm.add(lblNgaySinh, gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0; 
+        txtNgaySinh = new JDateChooser(); txtNgaySinh.setDateFormatString("dd/MM/yyyy"); txtNgaySinh.setPreferredSize(new Dimension(150, 25));
+        pnlForm.add(txtNgaySinh, gbc);
 
+        gbc.gridx = 2; gbc.weightx = 0;
+        JLabel lblGioiTinh = new JLabel("Giới tính"); lblGioiTinh.setForeground(Color.WHITE); pnlForm.add(lblGioiTinh, gbc);
+        
         JPanel pnlGender = new JPanel(new FlowLayout(FlowLayout.LEFT));
         pnlGender.setBackground(TEAL_COLOR);
-        pnlGender.setBorder(new LineBorder(Color.WHITE));
         rdoNam = new JRadioButton("Nam"); rdoNam.setBackground(TEAL_COLOR); rdoNam.setForeground(Color.WHITE);
         rdoNu = new JRadioButton("Nữ"); rdoNu.setBackground(TEAL_COLOR); rdoNu.setForeground(Color.WHITE);
         btnGroupGender = new ButtonGroup(); btnGroupGender.add(rdoNam); btnGroupGender.add(rdoNu);
         pnlGender.add(rdoNam); pnlGender.add(rdoNu);
-        
-        gbc.gridx = 1; gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
-        pnlForm.add(pnlGender, gbc);
+        gbc.gridx = 3; pnlForm.add(pnlGender, gbc);
 
-        addFormRow(pnlForm, gbc, 2, "Số điện thoại", txtSDT = new JTextField(15));
-        addFormRow(pnlForm, gbc, 4, "Địa chỉ", txtDiaChi = new JTextField(15));
+        // Dòng 3: Chức vụ - SĐT
+        gbc.gridy = 2;
+        addFormRow(pnlForm, gbc, 0, 2, "Chức vụ", txtChucVu = new JTextField(15));
+        addFormRow(pnlForm, gbc, 2, 2, "Số điện thoại", txtSDT = new JTextField(15));
 
-        pnlFormContainer.add(pnlForm);
+        // Dòng 4: Địa chỉ - Tài khoản (Username)
+        gbc.gridy = 3;
+        addFormRow(pnlForm, gbc, 0, 3, "Địa chỉ", txtDiaChi = new JTextField(15));
+        addFormRow(pnlForm, gbc, 2, 3, "Tài khoản", txtUsername = new JTextField(15)); 
+
+        // Dòng 5: Mật khẩu - Quyền (Role)
+        gbc.gridy = 4;
+        gbc.gridx = 0; gbc.weightx = 0;
+        JLabel lblPass = new JLabel("Mật khẩu"); lblPass.setForeground(Color.WHITE); pnlForm.add(lblPass, gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtPassword = new JPasswordField(15);
+        pnlForm.add(txtPassword, gbc);
+
+        gbc.gridx = 2; gbc.weightx = 0;
+        JLabel lblRole = new JLabel("Phân quyền"); lblRole.setForeground(Color.WHITE); pnlForm.add(lblRole, gbc);
+        gbc.gridx = 3; gbc.weightx = 1.0;
+        cboRole = new JComboBox<>(new String[]{"ADMIN", "NHÂN VIÊN"});
+        pnlForm.add(cboRole, gbc);
 
         // Buttons
         JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         pnlButtons.setBackground(TEAL_COLOR);
         btnThem = createStyledButton("Thêm"); btnSua = createStyledButton("Sửa"); btnXoa = createStyledButton("Xóa"); btnReset = createStyledButton("RESET");
         pnlButtons.add(btnThem); pnlButtons.add(btnSua); pnlButtons.add(btnXoa); pnlButtons.add(btnReset);
-        pnlFormContainer.add(pnlButtons);
+        
+        JPanel pnlTop = new JPanel(new BorderLayout());
+        pnlTop.add(pnlForm, BorderLayout.CENTER);
+        pnlTop.add(pnlButtons, BorderLayout.SOUTH);
+        add(pnlTop, BorderLayout.NORTH);
 
-        // Search
+        // Search Panel
         JPanel pnlSearch = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         pnlSearch.setBackground(TEAL_COLOR);
         txtTimKiem = new JTextField(15);
         btnTimKiem = createStyledButton("Tìm kiếm");
-        pnlSearch.add(new JLabel("Tên NV: ")).setForeground(Color.WHITE);
-        pnlSearch.add(txtTimKiem); pnlSearch.add(btnTimKiem);
-        pnlFormContainer.add(pnlSearch);
-
-        add(pnlFormContainer, BorderLayout.NORTH);
-
-        // 2. Table Area
-        String[] columnNames = {"Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Giới tính", "Chức vụ", "Số điện thoại", "Địa chỉ"};
+        JLabel lblSearch = new JLabel("Tên NV: "); lblSearch.setForeground(Color.WHITE);
+        pnlSearch.add(lblSearch); pnlSearch.add(txtTimKiem); pnlSearch.add(btnTimKiem);
+        pnlButtons.add(pnlSearch); 
+        
+        // Table
+        String[] columnNames = {"Mã NV", "Tên NV", "Ngày sinh", "Giới tính", "Chức vụ", "SĐT", "Địa chỉ", "Tài khoản", "Quyền"};
         tableModel = new DefaultTableModel(columnNames, 0);
         tableNhanVien = new JTable(tableModel);
         tableNhanVien.setRowHeight(25);
         tableNhanVien.getTableHeader().setBackground(new Color(230, 230, 230));
         tableNhanVien.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         JScrollPane scrollPane = new JScrollPane(tableNhanVien);
-        scrollPane.getViewport().setBackground(Color.WHITE);
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    // Helper methods (Copy từ MainView sang)
-    private void addFormRow(JPanel panel, GridBagConstraints gbc, int x, String labelText, Component field) {
-        gbc.gridx = x; gbc.weightx = 0; gbc.fill = GridBagConstraints.BOTH;
+    private void addFormRow(JPanel panel, GridBagConstraints gbc, int x, int y, String labelText, Component field) {
+        gbc.gridx = x; gbc.gridy = y; 
+        gbc.weightx = 0; gbc.fill = GridBagConstraints.BOTH;
         JLabel label = new JLabel(labelText); label.setForeground(Color.WHITE);
         panel.add(label, gbc);
         gbc.gridx = x + 1; gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -142,40 +140,73 @@ public class NhanVienView extends JPanel {
         return btn;
     }
 
-// [SỬA] Cập nhật hàm lấy dữ liệu từ Form
+    // --- CÁC HÀM GET/SET ---
+
+    // [MỚI] Hàm set text cho Mã NV (Controller cần dùng hàm này)
+    public void setMaNV(String text) {
+        txtMaNV.setText(text);
+    }
+
     public NhanVien getNhanVienInfo() {
         String gt = rdoNam.isSelected() ? "Nam" : "Nữ";
-        
         String strNgaySinh = "";
         if (txtNgaySinh.getDate() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             strNgaySinh = sdf.format(txtNgaySinh.getDate());
         }
 
-        return new NhanVien(txtMaNV.getText(), txtTenNV.getText(), strNgaySinh, gt, txtChucVu.getText(), txtSDT.getText(), txtDiaChi.getText());
+        return new NhanVien(
+            txtMaNV.getText(), 
+            txtTenNV.getText(), 
+            strNgaySinh, 
+            gt, 
+            txtChucVu.getText(), 
+            txtSDT.getText(), 
+            txtDiaChi.getText(),
+            txtUsername.getText(),
+            new String(txtPassword.getPassword()), 
+            cboRole.getSelectedItem().toString() 
+        );
     }
 
     public void fillForm(NhanVien nv) {
-            txtMaNV.setText(nv.getMaNV());
-            txtTenNV.setText(nv.getTenNV());
+        txtMaNV.setText(nv.getMaNV());
+        txtTenNV.setText(nv.getTenNV());
 
-            // Chuyển chuỗi String từ Model thành Date để hiển thị lên JDateChooser
-            try {
-                if (nv.getNgaySinh() != null && !nv.getNgaySinh().isEmpty()) {
-                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(nv.getNgaySinh());
-                    txtNgaySinh.setDate(date);
+        // Xử lý Ngày sinh an toàn hơn
+        try {
+            // Thử parse theo dd/MM/yyyy trước
+            if (nv.getNgaySinh() != null && !nv.getNgaySinh().isEmpty()) {
+                Date date;
+                if(nv.getNgaySinh().contains("-")) {
+                     // Nếu DB trả về yyyy-MM-dd
+                     date = new SimpleDateFormat("yyyy-MM-dd").parse(nv.getNgaySinh());
                 } else {
-                    txtNgaySinh.setDate(null);
+                     // Nếu DB trả về dd/MM/yyyy
+                     date = new SimpleDateFormat("dd/MM/yyyy").parse(nv.getNgaySinh());
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                txtNgaySinh.setDate(date);
+            } else {
                 txtNgaySinh.setDate(null);
             }
+        } catch (Exception e) {
+            txtNgaySinh.setDate(null);
+        }
 
-            txtChucVu.setText(nv.getChucVu());
-            txtSDT.setText(nv.getSoDienThoai());
-            txtDiaChi.setText(nv.getDiaChi());
-            if (nv.getGioiTinh() != null && nv.getGioiTinh().equals("Nam")) rdoNam.setSelected(true); else rdoNu.setSelected(true);
+        txtChucVu.setText(nv.getChucVu());
+        txtSDT.setText(nv.getSoDienThoai());
+        txtDiaChi.setText(nv.getDiaChi());
+        
+        if ("Nam".equalsIgnoreCase(nv.getGioiTinh())) rdoNam.setSelected(true); 
+        else rdoNu.setSelected(true);
+        
+        txtUsername.setText(nv.getUsername());
+        // Không set password lên form để bảo mật, hoặc set rỗng
+        txtPassword.setText(""); 
+        
+        if(nv.getRole() != null) {
+            cboRole.setSelectedItem(nv.getRole());
+        }
     }
 
     public void clearForm() {
@@ -184,27 +215,12 @@ public class NhanVienView extends JPanel {
         txtNgaySinh.setDate(null);
         txtChucVu.setText(""); txtSDT.setText(""); txtDiaChi.setText("");
         btnGroupGender.clearSelection();
+        txtUsername.setText("");
+        txtPassword.setText("");
+        cboRole.setSelectedIndex(0);
     }
     
-    public JTable getTable() { 
-        return tableNhanVien; 
-    }
-    public void clearTable() { 
-        tableModel.setRowCount(0); 
-    }
-    public void addRowToTable(NhanVien nv) { 
-        tableModel.addRow(nv.toObjectArray()); 
-    }
-    public int getSelectedRow() { 
-        return tableNhanVien.getSelectedRow(); 
-    }
-    public void updateRowInTable(NhanVien nv, int row) {
-        tableModel.setValueAt(nv.getMaNV(), row, 0); tableModel.setValueAt(nv.getTenNV(), row, 1);
-        tableModel.setValueAt(nv.getNgaySinh(), row, 2); tableModel.setValueAt(nv.getGioiTinh(), row, 3);
-        tableModel.setValueAt(nv.getChucVu(), row, 4); tableModel.setValueAt(nv.getSoDienThoai(), row, 5);
-        tableModel.setValueAt(nv.getDiaChi(), row, 6);
-    }
-    public void removeRowInTable(int row) { tableModel.removeRow(row); }
+    public JTable getTable() { return tableNhanVien; }
     public void addTableSelectionListener(javax.swing.event.ListSelectionListener listener) { tableNhanVien.getSelectionModel().addListSelectionListener(listener); }
     public void addThemListener(ActionListener al) { btnThem.addActionListener(al); }
     public void addSuaListener(ActionListener al) { btnSua.addActionListener(al); }

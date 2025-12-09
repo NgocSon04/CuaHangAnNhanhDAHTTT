@@ -26,6 +26,8 @@ public class MainView extends JFrame {
     private HoaDonView hoaDonView;
     private DatMonView datMonView;
     private ThucDonView qlThucDonView;
+    private KhoView khoView;
+    private DoanhThuView doanhThuView;
 
     public MainView() {
         setTitle("Hệ Thống Quản Lý Cửa Hàng Đồ Ăn Nhanh");
@@ -63,6 +65,8 @@ public class MainView extends JFrame {
         hoaDonView = new HoaDonView();
         datMonView = new DatMonView();
         qlThucDonView = new ThucDonView();
+        khoView = new KhoView();
+        doanhThuView = new DoanhThuView();
 
         pnlContent.add(createTrangChuPanel(), "Trang chủ");
         pnlContent.add(nhanVienView, "Nhân viên");
@@ -71,8 +75,8 @@ public class MainView extends JFrame {
         pnlContent.add(datMonView, "Đặt Món");
         pnlContent.add(hoaDonView, "Hóa đơn");
 
-        pnlContent.add(createPlaceholderPanel("Quản lý Kho"), "Kho");
-        pnlContent.add(createPlaceholderPanel("Báo cáo Doanh thu"), "Doanh thu");
+        pnlContent.add(khoView, "Kho");
+        pnlContent.add(doanhThuView, "Doanh thu");
 
         add(pnlContent, BorderLayout.CENTER);
 
@@ -123,6 +127,8 @@ public class MainView extends JFrame {
     public HoaDonView getHoaDonView(){ return hoaDonView; }
     public DatMonView getDatMonView(){ return datMonView; }
     public ThucDonView getThucDonView(){ return qlThucDonView; }
+    public KhoView getKhoView(){return khoView;}
+    public DoanhThuView getDoanhThuView(){return doanhThuView;}
 
     // =====================================
     //           PHÂN QUYỀN
@@ -145,9 +151,7 @@ public class MainView extends JFrame {
         if (btn != null) btn.setVisible(false);
     }
 
-    // =====================================
-    //              UI HELPER
-    // =====================================
+
     private JPanel createTrangChuPanel() {
         JPanel pnl = new JPanel(new GridBagLayout());
         pnl.setBackground(Color.WHITE);

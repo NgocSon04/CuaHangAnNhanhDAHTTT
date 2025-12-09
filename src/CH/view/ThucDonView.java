@@ -68,7 +68,10 @@ public class ThucDonView extends JPanel {
     }
     
     public void clearForm() {
-        txtMaMon.setText("Tự động"); txtTenMon.setText(""); txtDonGia.setText(""); txtDVT.setText("");
+        txtMaMon.setText("Tự động"); 
+        txtTenMon.setText(""); 
+        txtDonGia.setText(""); 
+        txtDVT.setText("");
     }
     
     // Getters & Listeners

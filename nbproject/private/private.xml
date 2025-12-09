@@ -11,7 +11,6 @@
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/NhanVienController.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/MainView.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/main/Main.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/User.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/LoginForm.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/KhachHangController.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/ThucDonController.java</file>
@@ -23,6 +22,10 @@
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/HoaDonController.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/HoaDon.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/ChiTietHoaDon.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/ThucDonView.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/DatMonView.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/DatMonController.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/MonAn.java</file>
         </group>
     </open-files>
 </project-private>

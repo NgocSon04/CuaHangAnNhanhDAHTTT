@@ -28,6 +28,7 @@ public class MainView extends JFrame {
     private ThucDonView qlThucDonView;
     private KhoView khoView;
     private DoanhThuView doanhThuView;
+    private TrangChuView trangChuView;
 
     public MainView() {
         setTitle("Hệ Thống Quản Lý Cửa Hàng Đồ Ăn Nhanh");
@@ -67,8 +68,9 @@ public class MainView extends JFrame {
         qlThucDonView = new ThucDonView();
         khoView = new KhoView();
         doanhThuView = new DoanhThuView();
+        trangChuView = new TrangChuView();
 
-        pnlContent.add(createTrangChuPanel(), "Trang chủ");
+        pnlContent.add(trangChuView, "Trang chủ");
         pnlContent.add(nhanVienView, "Nhân viên");
         pnlContent.add(khachHangView, "Khách hàng");
         pnlContent.add(qlThucDonView, "Thực đơn");
@@ -129,6 +131,7 @@ public class MainView extends JFrame {
     public ThucDonView getThucDonView(){ return qlThucDonView; }
     public KhoView getKhoView(){return khoView;}
     public DoanhThuView getDoanhThuView(){return doanhThuView;}
+    public TrangChuView getTrangChuView(){return trangChuView;}
 
     // =====================================
     //           PHÂN QUYỀN

@@ -34,7 +34,7 @@ public class TrangChuView extends JPanel {
         
         btnLamMoi = new JButton("Cập nhật số liệu");
         btnLamMoi.setBackground(PRIMARY_COLOR);
-        btnLamMoi.setForeground(Color.WHITE);
+        btnLamMoi.setForeground(Color.BLACK);
         btnLamMoi.setFocusPainted(false);
         btnLamMoi.setCursor(new Cursor(Cursor.HAND_CURSOR));
 

@@ -86,4 +86,23 @@ public class ThucDonDAO {
         } catch (Exception e) {}
         return newID;
     }
+
+    public int countAll() {
+        int count = 0;
+        try {
+            Connection cons = DBConnection.getConnection();
+            // Lưu ý: Tên bảng là ThucDon hay MonAn tùy vào lúc bạn tạo DB
+            String sql = "SELECT COUNT(*) FROM ThucDon"; 
+            PreparedStatement ps = cons.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            ps.close();
+            cons.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 }

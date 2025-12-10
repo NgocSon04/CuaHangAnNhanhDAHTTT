@@ -26,6 +26,17 @@
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/DatMonView.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/DatMonController.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/MonAn.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/TrangChuView.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/TrangChuController.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/KhoController.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/DoanhThuController.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/KhoDAO.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/DoanhThuDAO.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/Kho.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/ThongKeDoanhThu.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/KhoView.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/DoanhThuView.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/KhachHangView.java</file>
         </group>
     </open-files>
 </project-private>

@@ -171,4 +171,42 @@ public class HoaDonDAO {
         }
         return newID;
     }
+
+    public double sumAllTongTien() {
+       double total = 0;
+        try {
+            Connection cons = DBConnection.getConnection();
+            String sql = "SELECT SUM(TongTien) FROM HoaDon";
+            PreparedStatement ps = cons.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                total = rs.getDouble(1);
+            }
+            ps.close();
+            cons.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    public int countAll() {
+        int count = 0;
+        try {
+            Connection cons = DBConnection.getConnection();
+            String sql = "SELECT COUNT(*) FROM HoaDon";
+            PreparedStatement ps = cons.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            ps.close();
+            cons.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 }
+
+

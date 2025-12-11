@@ -11,7 +11,7 @@ public class DBConnection {
     private static final String PORT = "3306";
     private static final String DB_NAME = "QuanLyCuaHang";
     private static final String USER = "root";
-    private static final String PASS = "070704"; // Điền pass MySQL của bạn nếu có
+    private static final String PASS = ""; // Điền pass MySQL của bạn nếu có
 
     // URL kết nối chỉ đến Server (để tạo DB nếu chưa có)
     private static final String SERVER_URL = "jdbc:mysql://" + HOST + ":" + PORT + "/";

@@ -48,11 +48,7 @@ public class MainView extends JFrame {
         JPanel pnlUser = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         pnlUser.setBackground(Color.WHITE);
         pnlUser.add(new JLabel("Xin chào!"));
-        JButton btnLogout = new JButton("Đăng Xuất");
-        btnLogout.setBackground(ACCENT_RED);
-        btnLogout.setForeground(Color.BLACK);
-        btnLogout.setFocusPainted(false);
-        pnlUser.add(btnLogout);
+        
         pnlHeader.add(pnlUser, BorderLayout.EAST);
         add(pnlHeader, BorderLayout.NORTH);
 

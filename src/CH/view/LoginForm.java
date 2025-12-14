@@ -2,9 +2,15 @@ package CH.view;
 
 import CH.dao.AdminDAO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class LoginForm extends JFrame {
+
+    private final Color PRIMARY_COLOR = new Color(0, 102, 204); // Màu xanh dương đậm
+    private final Color BACKGROUND_COLOR = new Color(245, 245, 245); // Màu nền nhẹ
+    private final Color TEXT_COLOR = new Color(50, 50, 50);
 
     private JTextField txtUsername;
     private JPasswordField txtPassword;
@@ -12,44 +18,76 @@ public class LoginForm extends JFrame {
     private LoginListener loginListener;
 
     public LoginForm() {
-        setTitle("Đăng Nhập Hệ Thống");
-        setSize(400, 250); // Tăng kích thước một chút cho đẹp
+        setTitle("Đăng Nhập Hệ Thống Quản Lý");
+        setSize(450, 300); // Tăng kích thước
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridBagLayout());
+        setResizable(false); // Khóa không cho thay đổi kích thước
 
-        // ===== GridBagLayout Config =====
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        // Đặt màu nền chung
+        getContentPane().setBackground(BACKGROUND_COLOR);
 
-        // --- Label & Input Username ---
-        gbc.gridx = 0; gbc.gridy = 0;
-        add(new JLabel("Tài khoản:"), gbc);
+        // 1. Panel Chính (chứa tất cả các thành phần)
+        JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
+        mainPanel.setBorder(new EmptyBorder(25, 30, 25, 30));
+        mainPanel.setBackground(Color.WHITE); 
+        
+        // Cần một Container để căn giữa mainPanel trong JFrame
+        JPanel container = new JPanel(new GridBagLayout());
+        container.setBackground(BACKGROUND_COLOR);
+        container.add(mainPanel);
+        add(container);
 
-        gbc.gridx = 1;
+        // 2. Header (Tiêu đề)
+        JLabel lblTitle = new JLabel("HỆ THỐNG QUẢN LÝ CỬA HÀNG", SwingConstants.CENTER);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblTitle.setForeground(PRIMARY_COLOR);
+        mainPanel.add(lblTitle, BorderLayout.NORTH);
+
+        // 3. Form Panel (Tài khoản, Mật khẩu)
+        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 15)); // 2 hàng, 2 cột
+        formPanel.setBackground(Color.WHITE);
+
+        // --- Tài khoản ---
+        JLabel lblUsername = new JLabel("Tài khoản:");
+        lblUsername.setForeground(TEXT_COLOR);
+        lblUsername.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        formPanel.add(lblUsername);
+
         txtUsername = new JTextField(15);
-        txtUsername.setText("admin"); // Gợi ý sẵn để test nhanh
-        add(txtUsername, gbc);
+        txtUsername.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtUsername.setText("admin"); // Gợi ý sẵn
+        formPanel.add(txtUsername);
 
-        // --- Label & Input Password ---
-        gbc.gridx = 0; gbc.gridy = 1;
-        add(new JLabel("Mật khẩu:"), gbc);
+        // --- Mật khẩu ---
+        JLabel lblPassword = new JLabel("Mật khẩu:");
+        lblPassword.setForeground(TEXT_COLOR);
+        lblPassword.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        formPanel.add(lblPassword);
 
-        gbc.gridx = 1;
         txtPassword = new JPasswordField(15);
-        add(txtPassword, gbc);
+        txtPassword.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        formPanel.add(txtPassword);
 
-        // --- Button Login ---
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
-        btnLogin = new JButton("Đăng Nhập");
-        btnLogin.setBackground(new Color(0, 102, 204));
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+
+        // 4. Button Panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.WHITE);
+
+        btnLogin = new JButton("ĐĂNG NHẬP");
+        btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnLogin.setBackground(PRIMARY_COLOR);
         btnLogin.setForeground(Color.WHITE);
-        btnLogin.setPreferredSize(new Dimension(100, 35));
-        add(btnLogin, gbc);
+        btnLogin.setPreferredSize(new Dimension(150, 40));
+        btnLogin.setFocusPainted(false); // Bỏ viền focus khi click
+        
+        // Thêm hiệu ứng hover nhẹ (Optional: tạo class riêng cho nút bấm nếu cần)
+        ActionListener originalAction = e -> performLogin();
+        btnLogin.addActionListener(originalAction);
 
-        // ===== SỰ KIỆN =====
-        btnLogin.addActionListener(e -> performLogin());
+        buttonPanel.add(btnLogin);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Cho phép ấn Enter để login
         getRootPane().setDefaultButton(btnLogin);
@@ -59,6 +97,7 @@ public class LoginForm extends JFrame {
     }
 
     private void performLogin() {
+        // ... (Giữ nguyên logic login)
         String username = txtUsername.getText();
         String password = new String(txtPassword.getPassword());
 
@@ -68,11 +107,9 @@ public class LoginForm extends JFrame {
         }
 
         AdminDAO dao = new AdminDAO();
-        // Hàm login này giờ sẽ tìm trong bảng NhanVien
         String role = dao.login(username, password);
 
         if (role != null) {
-            // Gọi về Main để chuyển cảnh
             if (loginListener != null) {
                 loginListener.onLogin(role);
             }
@@ -81,7 +118,7 @@ public class LoginForm extends JFrame {
         }
     }
 
-    // Interface callback
+    // Interface callback (Giữ nguyên)
     public interface LoginListener {
         void onLogin(String role);
     }

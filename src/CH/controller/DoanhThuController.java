@@ -1,6 +1,6 @@
 package CH.controller;
 
-import CH.dao.DoanhThuDAO;
+import CH.dao.HoaDonDAO;
 import CH.model.ThongKeDoanhThu;
 import CH.view.DoanhThuView;
 import java.awt.event.ActionEvent;
@@ -12,53 +12,40 @@ import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class DoanhThuController {
     private DoanhThuView view;
-    private DoanhThuDAO dao;
+    private HoaDonDAO dao;
 
     public DoanhThuController(DoanhThuView view) {
         this.view = view;
-        this.dao = new DoanhThuDAO();
+        this.dao = new HoaDonDAO();
 
-        // Gán sự kiện cho nút Xem Báo Cáo
         view.getBtnXemBaoCao().addActionListener(new ReportListener());
         
-        // Tải báo cáo mặc định khi khởi động (ví dụ: cả năm)
         xemBaoCao(); 
     }
-    private String convertDateFromViewToDAO(String dateString) {
-        // Định dạng nhập vào từ View
-        DateTimeFormatter formatterIn = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        // Định dạng cần cho DAO/SQL
-        DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        try {
-            LocalDate date = LocalDate.parse(dateString, formatterIn);
-            return date.format(formatterOut);
-        } catch (DateTimeParseException e) {
-            return null; // Trả về null nếu định dạng ngày tháng không hợp lệ
-        }
-    }
     private void xemBaoCao() {
-        String tuNgay = view.getTxtTuNgay().getText();
-        String denNgay = view.getTxtDenNgay().getText();
+        String tuNgay = view.getTxtTuNgay().getText().trim();
+        String denNgay = view.getTxtDenNgay().getText().trim();
 
         if (tuNgay.isEmpty() || denNgay.isEmpty()) {
             JOptionPane.showMessageDialog(view, "Vui lòng nhập đầy đủ Từ Ngày và Đến Ngày.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        String tuNgayDAO = convertDateFromViewToDAO(tuNgay);
-        String denNgayDAO = convertDateFromViewToDAO(denNgay);
         
-        if (tuNgayDAO == null || denNgayDAO == null) {
-            JOptionPane.showMessageDialog(view, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng DD-MM-YYYY.", "Lỗi Định Dạng", JOptionPane.ERROR_MESSAGE);
+        Pattern datePattern = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");
+        if (!datePattern.matcher(tuNgay).matches() || !datePattern.matcher(denNgay).matches()) {
+            JOptionPane.showMessageDialog(view, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng DD/MM/YYYY.", "Lỗi Định Dạng", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         DefaultTableModel model = view.getTableModel();
         model.setRowCount(0); 
         
-        ArrayList<ThongKeDoanhThu> list = dao.getDoanhThuTheoKhoangThoiGian(tuNgayDAO, denNgayDAO);
+        List<ThongKeDoanhThu> list = dao.getDoanhThuTheoNgay(tuNgay, denNgay);
         double tongDoanhThu = 0;
         
         for (ThongKeDoanhThu item : list) {
@@ -66,7 +53,6 @@ public class DoanhThuController {
             tongDoanhThu += item.getTongDoanhThu();
         }
         
-        // Hiển thị tổng doanh thu
         DecimalFormat df = new DecimalFormat("#,###"); 
         view.getLblTongDoanhThu().setText("TỔNG DOANH THU: " + df.format(tongDoanhThu) + " VNĐ");
     }

@@ -73,7 +73,7 @@ public class KhoView extends JPanel {
         btnThem = createButton("Thêm");
         btnSua = createButton("Sửa");
         btnXoa = createButton("Xóa");
-        btnReset = createButton("Reset"); // Thêm nút Reset cho giống Hóa đơn
+        btnReset = createButton("Reset"); 
         
         btnPanel.add(btnThem);
         btnPanel.add(btnSua);
@@ -133,7 +133,7 @@ public class KhoView extends JPanel {
     
     private void addComponent(JPanel p, JComponent comp, int x, int y, GridBagConstraints gbc) {
         gbc.gridx = x; gbc.gridy = y;
-        gbc.weightx = 1.0; // Ô nhập liệu giãn hết chiều ngang
+        gbc.weightx = 1.0; 
         p.add(comp, gbc);
     }
 
@@ -147,8 +147,8 @@ public class KhoView extends JPanel {
     private JButton createButton(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btn.setBackground(BUTTON_BG); // Nền trắng
-        btn.setForeground(BUTTON_TEXT); // Chữ đen
+        btn.setBackground(BUTTON_BG); 
+        btn.setForeground(BUTTON_TEXT); 
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20)); // Padding nút
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));

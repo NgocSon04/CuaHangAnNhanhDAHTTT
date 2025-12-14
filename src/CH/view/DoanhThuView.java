@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class DoanhThuView extends JPanel {
     private JTable doanhThuTable;
@@ -12,7 +13,7 @@ public class DoanhThuView extends JPanel {
     // Components
     private JTextField txtTuNgay, txtDenNgay;
     private JButton btnXemBaoCao;
-    private JLabel lblTongDoanhThu; // Label hiển thị tổng cộng
+    private JLabel lblTongDoanhThu;
 
     // Màu sắc chủ đạo
     private final Color PRIMARY_COLOR = new Color(0, 77, 77); 
@@ -41,15 +42,15 @@ public class DoanhThuView extends JPanel {
         inputPanel.setBackground(PRIMARY_COLOR);
         
         // Từ ngày
-        inputPanel.add(createLabel("Từ Ngày (DD-MM-YYYY):"));
+        inputPanel.add(createLabel("Từ Ngày (DD/MM/YYYY):"));
         txtTuNgay = createTextField();
-        txtTuNgay.setText("01-01-2025"); // Ngày mặc định
+        txtTuNgay.setText("01/01/2025"); // Ngày mặc định
         inputPanel.add(txtTuNgay);
 
         // Đến ngày
-        inputPanel.add(createLabel("Đến Ngày (DD-MM-YYYY):"));
+        inputPanel.add(createLabel("Đến Ngày (DD/MM/YYYY):"));
         txtDenNgay = createTextField();
-        txtDenNgay.setText("31-12-2025"); // Ngày mặc định
+        txtDenNgay.setText("31/12/2025"); // Ngày mặc định
         inputPanel.add(txtDenNgay);
 
         // Nút xem báo cáo
@@ -61,7 +62,7 @@ public class DoanhThuView extends JPanel {
         tongDTPanel.setBackground(PRIMARY_COLOR);
         lblTongDoanhThu = new JLabel("TỔNG DOANH THU: 0 VNĐ");
         lblTongDoanhThu.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        lblTongDoanhThu.setForeground(Color.YELLOW); // Màu nổi bật cho tổng tiền
+        lblTongDoanhThu.setForeground(Color.YELLOW); 
         tongDTPanel.add(lblTongDoanhThu);
 
         // Đóng gói

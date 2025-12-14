@@ -3,11 +3,11 @@ package CH.model;
 import java.text.DecimalFormat;
 
 public class Kho {
-    private String maHH;    // Mã hàng hóa
-    private String tenHH;   // Tên hàng hóa
-    private int soLuong;    // Số lượng tồn kho
-    private double giaNhap; // Giá nhập
-    private double giaBan;  // Giá bán
+    private String maHH;    
+    private String tenHH;   
+    private int soLuong;    
+    private double giaNhap; 
+    private double giaBan;
 
     public Kho() {
     }

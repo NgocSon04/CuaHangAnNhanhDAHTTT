@@ -20,12 +20,10 @@ public class HoaDonController {
         this.view = view;
         this.dao = new HoaDonDAO();
         
-        // Tự động thêm dữ liệu mẫu nếu bảng trống
         dao.addSampleDataIfEmpty(); 
 
         loadData();
 
-        // --- GÁN SỰ KIỆN CHO CÁC NÚT ---
         view.addThemListener(new AddListener());
         view.addSuaListener(new EditListener());
         view.addXoaListener(new DeleteListener());
@@ -33,7 +31,6 @@ public class HoaDonController {
         
         view.addXemChiTietListener(e -> showHoaDonChiTiet());
         
-        // Sự kiện click vào bảng để đổ dữ liệu lên Form
         view.getTable().getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 fillFormFromTable();
@@ -58,7 +55,6 @@ public class HoaDonController {
             String tenKH = view.getTable().getValueAt(row, 2).toString();
             String ngayLap = view.getTable().getValueAt(row, 3).toString();
             
-            // Lấy tổng tiền (xử lý chuỗi tiền tệ)
             String strTien = view.getTable().getValueAt(row, 4).toString();
             double tongTien = 0;
             try {
@@ -73,7 +69,6 @@ public class HoaDonController {
     
     // Validate đơn giản
     private boolean validateForm(HoaDon hd) {
-        // [SỬA] Không cần check MaHD nữa vì nó tự động sinh
         if (hd.getTenNV().isEmpty() || hd.getNgayLap().isEmpty()) {
             JOptionPane.showMessageDialog(view, "Vui lòng nhập Nhân viên và Ngày lập!");
             return false;
@@ -81,7 +76,6 @@ public class HoaDonController {
         return true;
     }
 
-    // --- INNER CLASSES XỬ LÝ SỰ KIỆN ---
 
     class AddListener implements ActionListener {
         @Override
@@ -114,7 +108,7 @@ public class HoaDonController {
                 return;
             }
             HoaDon hd = view.getHoaDonInfo();
-            // Khi sửa thì MaHD lấy từ form (đã fill từ bảng) nên không cần getNewID
+            
             if (!validateForm(hd)) return;
 
             if (dao.update(hd)) {
@@ -133,7 +127,6 @@ public class HoaDonController {
                 JOptionPane.showMessageDialog(view, "Chọn hóa đơn cần xóa!");
                 return;
             }
-            // Lấy mã HD cần xóa (không lấy từ form vì form có thể đã bị sửa)
             int row = view.getSelectedRow();
             String maHD = view.getTable().getValueAt(row, 0).toString();
             
@@ -151,7 +144,6 @@ public class HoaDonController {
         }
     }
 
-    // Hàm hiển thị popup chi tiết
     private void showHoaDonChiTiet() {
         int row = view.getSelectedRow();
         if (row < 0) {

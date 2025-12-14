@@ -2,6 +2,7 @@ package CH.dao;
 
 import CH.model.HoaDon;
 import CH.model.ChiTietHoaDon;
+import CH.model.ThongKeDoanhThu;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +58,7 @@ public class HoaDonDAO {
         return list;
     }
 
-    // 3. [MỚI] Thêm hóa đơn
+    // 3 Thêm hóa đơn
     public boolean add(HoaDon hd) {
         try {
             Connection cons = DBConnection.getConnection();
@@ -67,7 +68,7 @@ public class HoaDonDAO {
             ps.setString(2, hd.getTenNV());
             ps.setString(3, hd.getTenKH());
             ps.setString(4, hd.getNgayLap());
-            ps.setDouble(5, hd.getTongTien()); // Mặc định tổng tiền = 0 khi mới tạo
+            ps.setDouble(5, hd.getTongTien());
             
             int row = ps.executeUpdate();
             ps.close();
@@ -79,7 +80,7 @@ public class HoaDonDAO {
         }
     }
 
-    // 4. [MỚI] Sửa hóa đơn
+    // 4.Sửa hóa đơn
     public boolean update(HoaDon hd) {
         try {
             Connection cons = DBConnection.getConnection();
@@ -100,7 +101,7 @@ public class HoaDonDAO {
         }
     }
 
-    // 5. [MỚI] Xóa hóa đơn
+    // 5.Xóa hóa đơn
     public boolean delete(String maHD) {
         try {
             Connection cons = DBConnection.getConnection();
@@ -118,7 +119,7 @@ public class HoaDonDAO {
         }
     }
     
-    // 6. Thêm dữ liệu mẫu (Chỉ chạy 1 lần nếu DB trống)
+    // 6. Thêm dữ liệu mẫu 
     public void addSampleDataIfEmpty() {
         try {
             Connection cons = DBConnection.getConnection();
@@ -148,10 +149,10 @@ public class HoaDonDAO {
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-                String lastID = rs.getString("MaHD"); // Ví dụ: HD009
-                if (lastID.length() >= 4) { // Kiểm tra độ dài để tránh lỗi
-                    String prefix = lastID.substring(0, 2); // "HD"
-                    String numberPart = lastID.substring(2); // "009"
+                String lastID = rs.getString("MaHD"); 
+                if (lastID.length() >= 4) { 
+                    String prefix = lastID.substring(0, 2); 
+                    String numberPart = lastID.substring(2); 
                     
                     try {
                         int number = Integer.parseInt(numberPart);
@@ -206,6 +207,36 @@ public class HoaDonDAO {
             e.printStackTrace();
         }
         return count;
+    }
+    public List<ThongKeDoanhThu> getDoanhThuTheoNgay(String dateFrom, String dateTo) {
+        List<ThongKeDoanhThu> list = new ArrayList<>();
+        try {
+            Connection cons = DBConnection.getConnection();
+            
+            // SỬ DỤNG STR_TO_DATE VÀ GROUP BY ĐỂ GỘP NHÓM DOANH THU THEO NGÀY
+            String sql = "SELECT NgayLap, SUM(TongTien) AS TongDoanhThu FROM HoaDon "
+                       + "WHERE STR_TO_DATE(NgayLap, '%d/%m/%Y') BETWEEN " 
+                       + "STR_TO_DATE(?, '%d/%m/%Y') AND STR_TO_DATE(?, '%d/%m/%Y') "
+                       + "GROUP BY NgayLap ORDER BY STR_TO_DATE(NgayLap, '%d/%m/%Y')"; 
+
+            PreparedStatement ps = cons.prepareStatement(sql);
+            ps.setString(1, dateFrom);
+            ps.setString(2, dateTo);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ThongKeDoanhThu tk = new ThongKeDoanhThu(
+                    rs.getString("NgayLap"), 
+                    rs.getDouble("TongDoanhThu")
+                );
+                list.add(tk);
+            }
+            ps.close();
+            cons.close();
+        } catch (Exception e) { 
+            e.printStackTrace(); 
+        }
+        return list;
     }
 }
 

@@ -9,6 +9,7 @@ import CH.model.MonAn;
 
 public class ThucDonView extends JPanel {
     private JTextField txtMaMon, txtTenMon, txtDonGia, txtDVT;
+    private JComboBox<String> cboMaHH;
     private JTable table;
     private DefaultTableModel model;
     private JButton btnThem, btnSua, btnXoa, btnReset;
@@ -28,8 +29,13 @@ public class ThucDonView extends JPanel {
         
         addInput(pnlForm, gbc, 0, 1, "Tên món", txtTenMon = new JTextField(15));
         addInput(pnlForm, gbc, 0, 2, "Đơn giá", txtDonGia = new JTextField(15));
-        addInput(pnlForm, gbc, 0, 3, "Đơn vị tính", txtDVT = new JTextField(15)); // Ly, Đĩa...
+        addInput(pnlForm, gbc, 0, 3, "Đơn vị tính", txtDVT = new JTextField(15)); 
 
+        
+        cboMaHH = new JComboBox<>();
+        cboMaHH.setPreferredSize(new Dimension(150, 28)); 
+        addInput(pnlForm, gbc, 2, 0, "Mã Hàng Hóa", cboMaHH); 
+        
         // Buttons
         JPanel pnlBtn = new JPanel();
         pnlBtn.setBackground(new Color(0, 77, 77));
@@ -43,7 +49,7 @@ public class ThucDonView extends JPanel {
         add(pnlNorth, BorderLayout.NORTH);
 
         // --- TABLE ---
-        String[] cols = {"Mã món", "Tên món", "Đơn giá", "Đơn vị tính"};
+        String[] cols = {"Mã món", "Tên món", "Đơn giá", "Đơn vị tính", "Mã HH"}; 
         model = new DefaultTableModel(cols, 0);
         table = new JTable(model);
         table.setRowHeight(25);
@@ -52,19 +58,37 @@ public class ThucDonView extends JPanel {
 
     private void addInput(JPanel p, GridBagConstraints gbc, int x, int y, String lbl, Component cmp) {
         gbc.gridx = x; gbc.gridy = y; 
+        gbc.weightx = 0;
         JLabel l = new JLabel(lbl); l.setForeground(Color.WHITE); p.add(l, gbc);
-        gbc.gridx = x+1; p.add(cmp, gbc);
+        gbc.gridx = x+1; gbc.weightx = 1.0; p.add(cmp, gbc);
     }
 
     public MonAn getMonAnInfo() {
         double gia = 0;
-        try { gia = Double.parseDouble(txtDonGia.getText()); } catch (Exception e) {}
-        return new MonAn(txtMaMon.getText(), txtTenMon.getText(), gia, txtDVT.getText());
+        try {
+            // Remove "," and "." before parsing to double
+            String giaStr = txtDonGia.getText().trim().replace(",", "").replace(".", "");
+            if (!giaStr.isEmpty()) {
+                gia = Double.parseDouble(giaStr);
+            }
+        } catch (Exception e) {
+            System.err.println("Error parsing price: " + e.getMessage());
+            gia = 0;
+        }
+
+        String maHH = "";
+        if (cboMaHH.getSelectedItem() != null) {
+            maHH = cboMaHH.getSelectedItem().toString();
+        }
+        return new MonAn(txtMaMon.getText(), txtTenMon.getText(), gia, txtDVT.getText(), maHH);
     }
 
     public void fillForm(MonAn m) {
-        txtMaMon.setText(m.getMaMon()); txtTenMon.setText(m.getTenMon());
-        txtDonGia.setText(String.format("%.0f", m.getDonGia())); txtDVT.setText(m.getDonViTinh()); // Sửa getDonViTinh -> lấy từ model
+        txtMaMon.setText(m.getMaMon()); 
+        txtTenMon.setText(m.getTenMon());
+        txtDonGia.setText(String.format("%.0f", m.getDonGia())); 
+        txtDVT.setText(m.getDonViTinh());
+        cboMaHH.setSelectedItem(m.getMaHH()); 
     }
     
     public void clearForm() {
@@ -72,6 +96,10 @@ public class ThucDonView extends JPanel {
         txtTenMon.setText(""); 
         txtDonGia.setText(""); 
         txtDVT.setText("");
+        cboMaHH.setSelectedIndex(-1);
+    }
+    public JComboBox<String> getCboMaHH() {
+        return cboMaHH;
     }
     
     // Getters & Listeners

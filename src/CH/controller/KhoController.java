@@ -30,9 +30,7 @@ public class KhoController {
         
         // Sự kiện tìm kiếm (Dùng Lambda expression cho gọn)
         this.view.getBtnTimKiem().addActionListener(e -> searchData());
-        
         this.view.getBtnReset().addActionListener(e -> clearForm());
-        // 3. QUAN TRỌNG: Sự kiện Click chuột vào bảng (Để lấy dữ liệu sửa/xóa)
         this.view.getKhoTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -44,7 +42,7 @@ public class KhoController {
     // Tải dữ liệu từ DAO và hiển thị lên bảng
     public void loadDataToView() {
         DefaultTableModel model = view.getTableModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ
+        model.setRowCount(0);
         ArrayList<Kho> list = dao.getAll();
         for (Kho item : list) {
             model.addRow(item.toObjectArray());
@@ -59,8 +57,7 @@ public class KhoController {
             view.getTxtMaHH().setText(table.getValueAt(row, 0).toString());
             view.getTxtTenHH().setText(table.getValueAt(row, 1).toString());
             view.getTxtSoLuong().setText(table.getValueAt(row, 2).toString());
-            
-            // Xử lý chuỗi tiền tệ (Bỏ chữ " VNĐ", dấu phẩy, dấu chấm để lấy số thô)
+
             String giaNhapStr = table.getValueAt(row, 3).toString()
                                      .replace(" VNĐ", "").replace(",", "").replace(".", "").trim();
             String giaBanStr = table.getValueAt(row, 4).toString()
@@ -69,19 +66,17 @@ public class KhoController {
             view.getTxtGiaNhap().setText(giaNhapStr);
             view.getTxtGiaBan().setText(giaBanStr);
             
-            // Khóa ô Mã HH khi chọn (vì Mã không được sửa)
             view.getTxtMaHH().setEditable(false);
         }
     }
     
-    // Nút Reset (để làm trắng ô nhập liệu khi cần thêm mới)
     private void clearForm() {
         view.getTxtMaHH().setText("");
         view.getTxtTenHH().setText("");
         view.getTxtSoLuong().setText("");
         view.getTxtGiaNhap().setText("");
         view.getTxtGiaBan().setText("");
-        view.getTxtMaHH().setEditable(true); // Mở lại khóa mã cho phép nhập mới
+        view.getTxtMaHH().setEditable(true);
     }
 
     // Hàm phụ trợ: Lấy dữ liệu từ Form -> tạo đối tượng Kho

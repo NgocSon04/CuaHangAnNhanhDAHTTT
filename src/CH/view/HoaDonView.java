@@ -42,7 +42,7 @@ public class HoaDonView extends JPanel {
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         pnlContainer.add(lblTitle);
-        pnlContainer.add(Box.createRigidArea(new Dimension(0, 15))); // Khoảng cách dưới tiêu đề
+        pnlContainer.add(Box.createRigidArea(new Dimension(0, 15))); 
 
         // --- FORM AREA (Chứa Input và Nút Xem chi tiết) ---
         JPanel pnlFormArea = new JPanel(new BorderLayout());

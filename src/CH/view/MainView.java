@@ -1,5 +1,8 @@
 package CH.view;
 
+import CH.controller.DatMonController; 
+import CH.controller.HoaDonController; 
+import CH.controller.KhoController;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -28,6 +31,10 @@ public class MainView extends JFrame {
     private KhoView khoView;
     private DoanhThuView doanhThuView;
     private TrangChuView trangChuView;
+    
+    private HoaDonController hoaDonController;
+    private DatMonController datMonController;
+    private KhoController khoController;
 
     public MainView() {
         setTitle("Hệ Thống Quản Lý Cửa Hàng Đồ Ăn Nhanh");
@@ -123,7 +130,14 @@ public class MainView extends JFrame {
         datMonView = new DatMonView();
         hoaDonView = new HoaDonView();
         khoView = new KhoView();
+        khoController = new KhoController(khoView);
         doanhThuView = new DoanhThuView();
+<<<<<<< Upstream, based on origin/main
+=======
+        new CH.controller.DoanhThuController(doanhThuView);
+        trangChuView = new TrangChuView();
+        new CH.controller.TrangChuController(trangChuView);
+>>>>>>> df53823 thang _ thực đơn, doanh thu, hóa đơn, trang chủ, kho 
 
         pnlContent.add(trangChuView, "Trang chủ");
         pnlContent.add(nhanVienView, "Nhân viên");

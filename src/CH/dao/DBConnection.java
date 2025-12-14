@@ -11,7 +11,7 @@ public class DBConnection {
     private static final String PORT = "3306";
     private static final String DB_NAME = "QuanLyCuaHang";
     private static final String USER = "root";
-    private static final String PASS = ""; // Điền pass MySQL của bạn nếu có
+    private static final String PASS = "1352004"; // Điền pass MySQL của bạn nếu có
 
     // URL kết nối chỉ đến Server (để tạo DB nếu chưa có)
     private static final String SERVER_URL = "jdbc:mysql://" + HOST + ":" + PORT + "/";
@@ -114,6 +114,7 @@ public class DBConnection {
             
             // 8. Tạo bảng ThucDon (Menu)
             String sqlCreateThucDon = "CREATE TABLE IF NOT EXISTS ThucDon ("
+                    + "MaHH VARCHAR(20),"
                     + "MaMon VARCHAR(20) NOT NULL PRIMARY KEY,"
                     + "TenMon VARCHAR(100),"
                     + "DonGia DOUBLE,"
@@ -122,7 +123,15 @@ public class DBConnection {
             dbStmt.executeUpdate(sqlCreateThucDon);
             System.out.println("Da Kiem tra/ Tao bang ThucDon.");
            
-
+            String sqlCreateKho = "CREATE TABLE IF NOT EXISTS Kho ("
+                    + "MaHH VARCHAR(20) NOT NULL PRIMARY KEY,"
+                    + "TenHH VARCHAR(100),"
+                    + "SoLuong INT,"
+                    + "GiaNhap DOUBLE,"
+                    + "GiaBan DOUBLE"
+                    + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+            dbStmt.executeUpdate(sqlCreateKho);
+            System.out.println("Da Kiem tra/ Tao bang Kho.");
             // (Optional) Tạo thêm các bảng khác ở đây nếu cần (Khách hàng, Hóa đơn...)
             
             dbStmt.close();

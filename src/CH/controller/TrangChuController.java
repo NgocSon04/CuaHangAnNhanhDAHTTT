@@ -6,6 +6,7 @@ import CH.view.TrangChuView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import java.awt.event.*;
 
 public class TrangChuController {
     private TrangChuView view;
@@ -24,8 +25,32 @@ public class TrangChuController {
         // Tải dữ liệu ngay khi khởi động
         loadStatistics();
 
+        this.view.getBtnLamMoi().addActionListener((ActionEvent e) -> {
+            updateData();
+        });   
         // Gán sự kiện cho nút làm mới
         view.getBtnLamMoi().addActionListener(e -> loadStatistics());
+    }
+    public void updateData() {
+        try {
+            // --- LẤY SỐ LIỆU TỪ DB ---
+            double tongDoanhThu = hoaDonDAO.sumAllTongTien();
+            int soHoaDon = hoaDonDAO.countAll();
+            int soKhach = khachHangDAO.countAll(); 
+            int soMon = thucDonDAO.countAll(); 
+
+            // --- ĐỊNH DẠNG TIỀN TỆ ---
+            DecimalFormat df = new DecimalFormat("#,### VNĐ");
+
+            // --- ĐẨY DỮ LIỆU LÊN VIEW ---
+            view.getLblTongDoanhThu().setText(df.format(tongDoanhThu));
+            view.getLblSoHoaDon().setText(String.valueOf(soHoaDon));
+            view.getLblSoKhachHang().setText(String.valueOf(soKhach));
+            view.getLblSoMonAn().setText(String.valueOf(soMon));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadStatistics() {

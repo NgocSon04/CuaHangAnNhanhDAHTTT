@@ -1,5 +1,6 @@
 package CH.controller;
 
+import CH.dao.KhoDAO;
 import CH.dao.ThucDonDAO;
 import CH.model.MonAn;
 import CH.view.ThucDonView;
@@ -8,13 +9,16 @@ import javax.swing.*;
 public class ThucDonController {
     private ThucDonView view;
     private ThucDonDAO dao;
+    private KhoDAO khoDao;
     private DatMonController datMonController;
 
     public ThucDonController(ThucDonView view, DatMonController datMonController) {
         this.view = view;
         this.dao = new ThucDonDAO();
+        this.khoDao = new KhoDAO();
         
         this.datMonController = datMonController;
+        loadMaHHToComboBox();
         loadData();
 
         view.addThemListener(e -> {
@@ -22,13 +26,23 @@ public class ThucDonController {
             if(m.getTenMon().isEmpty()) { JOptionPane.showMessageDialog(view, "Nhập tên món!"); 
             return; 
             }
+            if(m.getMaHH() == null || m.getMaHH().isEmpty()) {
+                JOptionPane.showMessageDialog(view, "Vui lòng chọn Mã Hàng Hóa từ kho!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             m.setMaMon(dao.getNewID()); 
             if(dao.add(m)) { reload(); JOptionPane.showMessageDialog(view, "Thêm thành công!"); }
+            else { JOptionPane.showMessageDialog(view, "Thêm thất bại (Có thể lỗi Database).", "Lỗi", JOptionPane.ERROR_MESSAGE); }
         });
 
         view.addSuaListener(e -> {
             if(view.getSelectedRow() < 0) return;
+            if(view.getMonAnInfo().getMaHH() == null || view.getMonAnInfo().getMaHH().isEmpty()) {
+                JOptionPane.showMessageDialog(view, "Vui lòng chọn Mã Hàng Hóa từ kho!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             if(dao.update(view.getMonAnInfo())) { reload(); JOptionPane.showMessageDialog(view, "Sửa thành công!"); }
+            else { JOptionPane.showMessageDialog(view, "Sửa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE); }
         });
 
         view.addXoaListener(e -> {
@@ -51,6 +65,18 @@ public class ThucDonController {
                 view.fillForm(new MonAn(ma, ten, Double.parseDouble(giaStr), dvt));
             }
         });
+    }
+    private void loadMaHHToComboBox() {
+        view.getCboMaHH().removeAllItems();
+        try {
+            for (String maHH : khoDao.getAllMaHH()) {
+                view.getCboMaHH().addItem(maHH);
+            }
+            view.getCboMaHH().setSelectedIndex(-1); // Không chọn gì mặc định
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(view, "Lỗi tải Mã Hàng Hóa từ Kho!", "Lỗi DB", JOptionPane.ERROR_MESSAGE);
+             e.printStackTrace();
+        }
     }
 
     private void loadData() {

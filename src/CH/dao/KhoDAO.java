@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class KhoDAO {
     // Lấy tất cả danh sách hàng hóa
@@ -36,6 +37,62 @@ public class KhoDAO {
             }
         }
         return danhSachKho;
+    }
+    public List<String> getAllMaHH() {
+        List<String> maHHList = new ArrayList<>();
+        Connection cons = DBConnection.getConnection();
+        String sql = "SELECT MaHH FROM Kho ORDER BY MaHH";
+        try (PreparedStatement ps = cons.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                maHHList.add(rs.getString("MaHH"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (cons != null) cons.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return maHHList;
+    }
+    
+    // Hàm lấy số lượng tồn kho theo MaHH (Mã hàng hóa)
+    public int laySoLuongTon(String maHH) {
+        int soLuong = 0;
+        Connection conn = DBConnection.getConnection();
+        // [FIXED] Sử dụng MaHH thay vì MaMon
+        String sql = "SELECT SoLuong FROM Kho WHERE MaHH = ?"; 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, maHH);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    soLuong = rs.getInt("SoLuong");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if(conn != null) conn.close(); } catch (SQLException ex) { ex.printStackTrace(); }
+        }
+        return soLuong;
+    }
+    
+    // Hàm trừ kho: Nhận vào Connection để dùng Transaction
+    public void truKho(Connection conn, String maHH, int soLuongMua) throws Exception {
+        // [FIXED] Sử dụng MaHH thay vì MaMon
+        String sql = "UPDATE Kho SET SoLuong = SoLuong - ? WHERE MaHH = ?"; 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, soLuongMua);
+            ps.setString(2, maHH);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            // Ném exception để Controller bắt và rollback
+            throw new Exception("Lỗi trừ kho cho mã " + maHH, e); 
+        }
     }
     
     // Thêm một mặt hàng mới vào kho

@@ -34,6 +34,7 @@ public class KhachHangDAO {
         }
         return list;
     }
+    
 
     public boolean add(KhachHang kh) {
         try {
@@ -124,18 +125,14 @@ public class KhachHangDAO {
     public int countAll() {
         int count = 0;
         try {
-            Connection cons = DBConnection.getConnection();
-            String sql = "SELECT COUNT(*) FROM KhachHang";
-            PreparedStatement ps = cons.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            java.sql.Connection conn = DBConnection.getConnection();
+            java.sql.PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM KhachHang");
+            java.sql.ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
             }
-            ps.close();
-            cons.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            conn.close();
+        } catch (Exception e) { e.printStackTrace(); }
         return count;
     }
 }

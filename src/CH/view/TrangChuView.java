@@ -110,7 +110,7 @@ public class TrangChuView extends JPanel {
         JPanel spacer = new JPanel();
         spacer.setBackground(Color.WHITE);
         spacer.setPreferredSize(new Dimension(10, 0));
-        card.add(spacer, BorderLayout.EAST); // Mẹo: Dùng EAST của BorderLayout trong content panel sẽ tốt hơn, nhưng đây là layout lồng
+        card.add(spacer, BorderLayout.EAST);
         
         // Sửa lại layout một chút để đẹp hơn
         JPanel mainContainer = new JPanel(new BorderLayout(15, 0));
@@ -120,6 +120,7 @@ public class TrangChuView extends JPanel {
 
         return mainContainer;
     }
+    
 
     // Getters
     public JLabel getLblTongDoanhThu() { return lblTongDoanhThu; }

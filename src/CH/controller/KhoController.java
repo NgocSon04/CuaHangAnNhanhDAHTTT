@@ -15,21 +15,17 @@ import javax.swing.table.DefaultTableModel;
 public class KhoController {
     private KhoView view;
     private KhoDAO dao;
+    private ThucDonController thucDonController;
 
     public KhoController(KhoView view) {
         this.view = view;
         this.dao = new KhoDAO();
-
-        // 1. Load dữ liệu ban đầu
         loadDataToView();
 
-        // 2. Gán sự kiện cho các nút chức năng
         this.view.getBtnThem().addActionListener(new AddListener());
         this.view.getBtnSua().addActionListener(new UpdateListener());
         this.view.getBtnXoa().addActionListener(new DeleteListener());
         
-        // Sự kiện tìm kiếm (Dùng Lambda expression cho gọn)
-        this.view.getBtnTimKiem().addActionListener(e -> searchData());
         this.view.getBtnReset().addActionListener(e -> clearForm());
         this.view.getKhoTable().addMouseListener(new MouseAdapter() {
             @Override
@@ -37,6 +33,14 @@ public class KhoController {
                 fillDataFromTableToTextFields();
             }
         });
+    }
+    public void setThucDonController(ThucDonController thucDonController){
+        this.thucDonController = thucDonController;
+    }
+    private void updateThucDonSide() {
+        if (thucDonController != null) {
+            thucDonController.loadMaHHToComboBox();
+        }
     }
 
     // Tải dữ liệu từ DAO và hiển thị lên bảng
@@ -54,17 +58,10 @@ public class KhoController {
         JTable table = view.getKhoTable();
         int row = table.getSelectedRow();
         if (row >= 0) {
+            // Chỉ lấy 3 cột: Mã, Tên, Số Lượng
             view.getTxtMaHH().setText(table.getValueAt(row, 0).toString());
             view.getTxtTenHH().setText(table.getValueAt(row, 1).toString());
             view.getTxtSoLuong().setText(table.getValueAt(row, 2).toString());
-
-            String giaNhapStr = table.getValueAt(row, 3).toString()
-                                     .replace(" VNĐ", "").replace(",", "").replace(".", "").trim();
-            String giaBanStr = table.getValueAt(row, 4).toString()
-                                     .replace(" VNĐ", "").replace(",", "").replace(".", "").trim();
-            
-            view.getTxtGiaNhap().setText(giaNhapStr);
-            view.getTxtGiaBan().setText(giaBanStr);
             
             view.getTxtMaHH().setEditable(false);
         }
@@ -74,8 +71,6 @@ public class KhoController {
         view.getTxtMaHH().setText("");
         view.getTxtTenHH().setText("");
         view.getTxtSoLuong().setText("");
-        view.getTxtGiaNhap().setText("");
-        view.getTxtGiaBan().setText("");
         view.getTxtMaHH().setEditable(true);
     }
 
@@ -90,26 +85,11 @@ public class KhoController {
         }
 
         int sl = Integer.parseInt(view.getTxtSoLuong().getText().trim());
-        double gn = Double.parseDouble(view.getTxtGiaNhap().getText().trim().replace(",", ""));
-        double gb = Double.parseDouble(view.getTxtGiaBan().getText().trim().replace(",", ""));
         
-        return new Kho(ma, ten, sl, gn, gb);
+        // Constructor mới chỉ có 3 tham số
+        return new Kho(ma, ten, sl);
     }
     
-    // Hàm tìm kiếm đơn giản
-    private void searchData() {
-        String keyword = view.getTxtTimKiem().getText().trim().toLowerCase();
-        DefaultTableModel model = view.getTableModel();
-        model.setRowCount(0);
-        ArrayList<Kho> list = dao.getAll();
-        for (Kho k : list) {
-            // Tìm theo Mã hoặc Tên
-            if (k.getTenHH().toLowerCase().contains(keyword) || k.getMaHH().toLowerCase().contains(keyword)) {
-                 model.addRow(k.toObjectArray());
-            }
-        }
-    }
-
     // --- CÁC CLASS XỬ LÝ SỰ KIỆN (INNER CLASSES) ---
 
     // 1. Class xử lý nút THÊM
@@ -122,11 +102,13 @@ public class KhoController {
                     JOptionPane.showMessageDialog(view, "Thêm hàng hóa thành công!");
                     loadDataToView();
                     clearForm();
+                    updateThucDonSide();
                 } else {
                     JOptionPane.showMessageDialog(view, "Thêm thất bại. Có thể trùng Mã HH!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(view, "Lỗi: Số lượng và Giá phải là số!", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                // Sửa thông báo lỗi
+                JOptionPane.showMessageDialog(view, "Lỗi: Số lượng phải là số nguyên!", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(view, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
@@ -138,7 +120,6 @@ public class KhoController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                // Kiểm tra xem người dùng đã chọn hàng chưa
                 if (view.getTxtMaHH().getText().isEmpty()) {
                     JOptionPane.showMessageDialog(view, "Vui lòng chọn hàng hóa cần sửa từ bảng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
                     return;
@@ -149,11 +130,13 @@ public class KhoController {
                     JOptionPane.showMessageDialog(view, "Cập nhật thành công!");
                     loadDataToView();
                     clearForm();
+                    updateThucDonSide();
                 } else {
                     JOptionPane.showMessageDialog(view, "Cập nhật thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
+                
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(view, "Lỗi: Số lượng và Giá phải là số!", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Lỗi: Số lượng phải là số nguyên!", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(view, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
@@ -180,6 +163,7 @@ public class KhoController {
                     JOptionPane.showMessageDialog(view, "Xóa thành công!");
                     loadDataToView();
                     clearForm();
+                    updateThucDonSide();
                 } else {
                     JOptionPane.showMessageDialog(view, "Xóa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }

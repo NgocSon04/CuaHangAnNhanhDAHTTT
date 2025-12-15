@@ -58,15 +58,21 @@ public class ThucDonController {
         view.getTable().getSelectionModel().addListSelectionListener(e -> {
             if(!e.getValueIsAdjusting() && view.getSelectedRow() >= 0) {
                 int r = view.getSelectedRow();
-                String ma = view.getTable().getValueAt(r, 0).toString();
-                String ten = view.getTable().getValueAt(r, 1).toString();
-                String giaStr = view.getTable().getValueAt(r, 2).toString().replace(",", "");
-                String dvt = view.getTable().getValueAt(r, 3).toString();
-                view.fillForm(new MonAn(ma, ten, Double.parseDouble(giaStr), dvt));
+                try{
+                    String ma = view.getTable().getValueAt(r, 0).toString();
+                    String ten = view.getTable().getValueAt(r, 1).toString();
+                    String giaStr = view.getTable().getValueAt(r, 2).toString().replace(",", "");
+                    String dvt = view.getTable().getValueAt(r, 3).toString();
+                    Object imgObj = view.getTable().getValueAt(r, 4);
+                    String hinhAnh = (imgObj != null) ? imgObj.toString(): "";
+                    view.fillForm(new MonAn(ma, ten, Double.parseDouble(giaStr), dvt, hinhAnh, null));
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
         });
     }
-    private void loadMaHHToComboBox() {
+    public void loadMaHHToComboBox() {
         view.getCboMaHH().removeAllItems();
         try {
             for (String maHH : khoDao.getAllMaHH()) {

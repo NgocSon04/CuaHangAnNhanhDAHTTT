@@ -5,61 +5,43 @@ public class MonAn {
     private String tenMon;
     private double donGia;
     private String donViTinh;
-    private String maHH;
+    private String maHH;    // Để liên kết với Kho
+    private String hinhAnh; // Để hiển thị ảnh
 
     public MonAn() {
     }
 
-    public MonAn(String maMon, String tenMon, double donGia, String donViTinh, String maHH) {
+    // Constructor ĐẦY ĐỦ cả MaHH và HinhAnh
+    public MonAn(String maMon, String tenMon, double donGia, String donViTinh, String maHH, String hinhAnh) {
         this.maMon = maMon;
         this.tenMon = tenMon;
         this.donGia = donGia;
         this.donViTinh = donViTinh;
         this.maHH = maHH;
-    }
-    public MonAn(String maMon, String tenMon, double donGia, String donViTinh) {
-        this(maMon, tenMon, donGia, donViTinh, "");
+        this.hinhAnh = hinhAnh;
     }
 
-    public String getMaMon() {
-        return maMon;
-    }
+    // --- GETTERS VÀ SETTERS ---
+    public String getMaMon() { return maMon; }
+    public void setMaMon(String maMon) { this.maMon = maMon; }
 
-    public String getTenMon() {
-        return tenMon;
-    }
+    public String getTenMon() { return tenMon; }
+    public void setTenMon(String tenMon) { this.tenMon = tenMon; }
 
-    public double getDonGia() {
-        return donGia;
-    }
+    public double getDonGia() { return donGia; }
+    public void setDonGia(double donGia) { this.donGia = donGia; }
 
-    public String getDonViTinh() { // [ĐÃ BỔ SUNG]
-        return donViTinh;
-    }
-    
+    public String getDonViTinh() { return donViTinh; }
+    public void setDonViTinh(String donViTinh) { this.donViTinh = donViTinh; }
+
     public String getMaHH() { return maHH; }
-    
-    // --- SETTERS (Thêm vào để đầy đủ chuẩn Java Bean) ---
-    public void setMaMon(String maMon) {
-        this.maMon = maMon;
-    }
-
-    public void setTenMon(String tenMon) {
-        this.tenMon = tenMon;
-    }
-
-    public void setDonGia(double donGia) {
-        this.donGia = donGia;
-    }
-
-    public void setDonViTinh(String donViTinh) {
-        this.donViTinh = donViTinh;
-    }
-    
     public void setMaHH(String maHH) { this.maHH = maHH; }
 
-    // Chuyển đổi sang mảng Object để hiển thị lên JTable
+    public String getHinhAnh() { return hinhAnh; }
+    public void setHinhAnh(String hinhAnh) { this.hinhAnh = hinhAnh; }
+
+    // Chuyển đổi sang mảng Object để hiển thị lên JTable (Hiển thị cả MaHH cho dễ quản lý)
     public Object[] toObjectArray() {
-        return new Object[]{maMon, tenMon, String.format("%,.0f", donGia), donViTinh, maHH};
+        return new Object[]{maMon, tenMon, String.format("%,.0f", donGia), donViTinh, maHH, hinhAnh};
     }
 }

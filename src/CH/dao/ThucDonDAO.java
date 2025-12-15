@@ -11,11 +11,19 @@ public class ThucDonDAO {
         List<MonAn> list = new ArrayList<>();
         try {
             Connection cons = DBConnection.getConnection();
-            String sql = "SELECT MaMon, TenMon, DonGia, DonViTinh, MaHH FROM ThucDon";
+            // Lấy đủ cột: MaHH (để trừ kho) và HinhAnh (để hiển thị)
+            String sql = "SELECT MaMon, TenMon, DonGia, DonViTinh, MaHH, HinhAnh FROM ThucDon";
             PreparedStatement ps = cons.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            list.add(new MonAn(rs.getString(1), rs.getString(2), rs.getDouble(3), rs.getString(4), rs.getString(5)));
+                list.add(new MonAn(
+                    rs.getString(1), 
+                    rs.getString(2), 
+                    rs.getDouble(3), 
+                    rs.getString(4), 
+                    rs.getString(5), // MaHH
+                    rs.getString(6)  // HinhAnh
+                ));
             }
             ps.close();
             cons.close();
@@ -27,13 +35,14 @@ public class ThucDonDAO {
     public boolean add(MonAn m) {
         try {
             Connection cons = DBConnection.getConnection();
-            String sql = "INSERT INTO ThucDon(MaMon, TenMon, DonGia, DonViTinh, MaHH) VALUES(?,?,?,?,?)";
+            String sql = "INSERT INTO ThucDon(MaMon, TenMon, DonGia, DonViTinh, MaHH, HinhAnh) VALUES(?,?,?,?,?,?)";
             PreparedStatement ps = cons.prepareStatement(sql);
             ps.setString(1, m.getMaMon());
             ps.setString(2, m.getTenMon());
             ps.setDouble(3, m.getDonGia());
             ps.setString(4, m.getDonViTinh());
             ps.setString(5, m.getMaHH());
+            ps.setString(6, m.getHinhAnh());
             int row = ps.executeUpdate();
             ps.close();
             cons.close();
@@ -48,13 +57,15 @@ public class ThucDonDAO {
     public boolean update(MonAn m) {
         try {
             Connection cons = DBConnection.getConnection();
-            String sql = "UPDATE ThucDon SET TenMon=?, DonGia=?, DonViTinh=?, MaHH=? WHERE MaMon=?";
+            String sql = "UPDATE ThucDon SET TenMon=?, DonGia=?, DonViTinh=?, MaHH=?, HinhAnh=? WHERE MaMon=?";
             PreparedStatement ps = cons.prepareStatement(sql);
             ps.setString(1, m.getTenMon());
             ps.setDouble(2, m.getDonGia());
             ps.setString(3, m.getDonViTinh());
             ps.setString(4, m.getMaHH());
-            ps.setString(5, m.getMaMon());
+            ps.setString(5, m.getHinhAnh());
+            ps.setString(6, m.getMaMon());
+            
             int row = ps.executeUpdate();
             ps.close();
             cons.close();
@@ -83,7 +94,7 @@ public class ThucDonDAO {
             Connection cons = DBConnection.getConnection();
             ResultSet rs = cons.createStatement().executeQuery("SELECT MaMon FROM ThucDon ORDER BY length(MaMon) DESC, MaMon DESC LIMIT 1");
             if (rs.next()) {
-                String lastID = rs.getString(1); // M09
+                String lastID = rs.getString(1);
                 int num = Integer.parseInt(lastID.substring(1)) + 1;
                 newID = "M" + (num < 10 ? "0" + num : num);
             }
@@ -92,17 +103,24 @@ public class ThucDonDAO {
         return newID;
     }
 
+    // 6. [MỚI THÊM] Đếm tổng số món ăn (Dùng cho Trang Chủ)
     public int countAll() {
         int count = 0;
         try {
-            java.sql.Connection conn = DBConnection.getConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM ThucDon");
-            java.sql.ResultSet rs = ps.executeQuery();
+            Connection cons = DBConnection.getConnection();
+            String sql = "SELECT COUNT(*) FROM ThucDon";
+            PreparedStatement ps = cons.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
             if (rs.next()) {
                 count = rs.getInt(1);
             }
-            conn.close();
-        } catch (Exception e) { e.printStackTrace(); }
+            
+            ps.close();
+            cons.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return count;
     }
 }

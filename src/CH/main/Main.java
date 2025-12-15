@@ -35,18 +35,25 @@ public class Main {
                     MainView mainView = new MainView();
                     mainView.setRole("ADMIN");
 
-                    // Các Controller độc lập
+                    // 1. Các Controller độc lập
                     new NhanVienController(mainView.getNhanVienView());
                     new KhachHangController(mainView.getKhachHangView());
+                    new TrangChuController(mainView.getTrangChuView()); 
 
-                    // Controller Hóa đơn
+                    // 2. Controller Hóa đơn
                     HoaDonController hoaDonCtrl = new HoaDonController(mainView.getHoaDonView());
 
-                    // Controller Đặt món (Cần HoaDonCtrl)
+                    // 3. Controller Đặt món (Cần HoaDonCtrl)
                     DatMonController datMonCtrl = new DatMonController(mainView.getDatMonView(), hoaDonCtrl);
+
+                    // 4. KHỞI TẠO THỰC ĐƠN TRƯỚC (Để lấy tham chiếu truyền vào Kho)
+                    ThucDonController thucDonCtrl = new ThucDonController(mainView.getThucDonView(), datMonCtrl);
+
+                    // 5. KHỞI TẠO KHO VÀ LIÊN KẾT
+                    KhoController khoCtrl = new KhoController(mainView.getKhoView());
+                    khoCtrl.setThucDonController(thucDonCtrl); 
                     
-                    // Controller Thực đơn (Cần DatMonCtrl để refresh khi thêm/sửa/xóa món)
-                    new ThucDonController(mainView.getThucDonView(), datMonCtrl);
+                    datMonCtrl.setKhoController(khoCtrl);
 
                     mainView.setVisible(true);
                     loginForm.dispose();

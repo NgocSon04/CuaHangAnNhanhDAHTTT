@@ -3,40 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/AdminDAO.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/DBConnection.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/NhanVien.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/NhanVienDAO.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/NhanVienView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/NhanVienController.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/MainView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/main/Main.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/LoginForm.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/KhachHangController.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/ThucDonController.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/KhachHangDAO.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/ThucDonDAO.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/HoaDonView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/ChiTietHoaDonView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/HoaDonDAO.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/HoaDonController.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/HoaDon.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/ChiTietHoaDon.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/ThucDonView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/DatMonView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/DatMonController.java</file>
             <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/MonAn.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/TrangChuView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/TrangChuController.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/KhoController.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/controller/DoanhThuController.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/KhoDAO.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/DoanhThuDAO.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/Kho.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/model/ThongKeDoanhThu.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/KhoView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/DoanhThuView.java</file>
-            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/view/KhachHangView.java</file>
+            <file>file:/C:/Users/NGUYEN%20NGOC%20SON/Downloads/QuanLyCuaHangAn/QuanLyCuaHangAn/src/CH/dao/ThucDonDAO.java</file>
         </group>
     </open-files>
 </project-private>

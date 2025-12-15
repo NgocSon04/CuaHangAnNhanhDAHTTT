@@ -10,7 +10,7 @@ public class KhoView extends JPanel {
     private DefaultTableModel tableModel;
     
     // Components
-    private JTextField txtMaHH, txtTenHH, txtSoLuong, txtGiaNhap, txtGiaBan;
+    private JTextField txtMaHH, txtTenHH, txtSoLuong;
     private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnReset; 
     private JTextField txtTimKiem;
 
@@ -57,14 +57,7 @@ public class KhoView extends JPanel {
         txtSoLuong = createTextField();
         addComponent(inputPanel, txtSoLuong, 1, 1, gbc);
         
-        addLabel(inputPanel, "Giá Nhập:", 2, 1, gbc);
-        txtGiaNhap = createTextField();
-        addComponent(inputPanel, txtGiaNhap, 3, 1, gbc);
 
-        // Hàng 3 (Giá Bán nằm một mình hoặc ghép dòng)
-        addLabel(inputPanel, "Giá Bán:", 0, 2, gbc);
-        txtGiaBan = createTextField();
-        addComponent(inputPanel, txtGiaBan, 1, 2, gbc);
 
         // 1.3 Panel chứa các Nút chức năng
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
@@ -108,7 +101,7 @@ public class KhoView extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
         // --- PHẦN 2: BẢNG DỮ LIỆU ---
-        String[] headers = {"Mã HH", "Tên HH", "Số Lượng", "Giá Nhập", "Giá Bán"};
+        String[] headers = {"Mã HH", "Tên HH", "Số Lượng"};
         tableModel = new DefaultTableModel(headers, 0);
         khoTable = new JTable(tableModel);
         khoTable.setRowHeight(28); // Hàng cao hơn chút cho dễ nhìn
@@ -124,7 +117,7 @@ public class KhoView extends JPanel {
     // --- CÁC HÀM HỖ TRỢ TẠO GIAO DIỆN ---
     private void addLabel(JPanel p, String text, int x, int y, GridBagConstraints gbc) {
         gbc.gridx = x; gbc.gridy = y;
-        gbc.weightx = 0; // Nhãn không giãn kích thước
+        gbc.weightx = 0; 
         JLabel lbl = new JLabel(text);
         lbl.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lbl.setForeground(TEXT_COLOR); // Chữ màu trắng
@@ -150,7 +143,7 @@ public class KhoView extends JPanel {
         btn.setBackground(BUTTON_BG); 
         btn.setForeground(BUTTON_TEXT); 
         btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20)); // Padding nút
+        btn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20)); 
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
@@ -160,13 +153,12 @@ public class KhoView extends JPanel {
     public JTextField getTxtMaHH() { return txtMaHH; }
     public JTextField getTxtTenHH() { return txtTenHH; }
     public JTextField getTxtSoLuong() { return txtSoLuong; }
-    public JTextField getTxtGiaNhap() { return txtGiaNhap; }
-    public JTextField getTxtGiaBan() { return txtGiaBan; }
+
     public JTable getKhoTable() { return khoTable; }
     public JButton getBtnThem() { return btnThem; }
     public JButton getBtnSua() { return btnSua; }
     public JButton getBtnXoa() { return btnXoa; }
     public JButton getBtnTimKiem() { return btnTimKiem; }
     public JTextField getTxtTimKiem() { return txtTimKiem; }
-    public JButton getBtnReset() { return btnReset; } // Mới thêm
+    public JButton getBtnReset() { return btnReset; } 
 }

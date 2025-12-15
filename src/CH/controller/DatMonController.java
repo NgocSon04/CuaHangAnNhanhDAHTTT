@@ -21,6 +21,7 @@ public class DatMonController {
     private KhoDAO khoDao;
     private double currentTotal = 0;
     private HoaDonController hoaDonController;
+    private KhoController khoController;
     
     public DatMonController(DatMonView view, HoaDonController hoaDonController) {
         this.view = view;
@@ -54,6 +55,9 @@ public class DatMonController {
                 tinhLaiTienMotDong(e.getFirstRow());
             }
         });
+    }
+    public void setKhoController(KhoController khoController) {
+        this.khoController = khoController;
     }
 
 
@@ -219,6 +223,7 @@ public class DatMonController {
             JOptionPane.showMessageDialog(view, "Thanh toán thành công! Mã HĐ: " + maHD);
             view.getModelGioHang().setRowCount(0);
             updateTongTien();
+            if(khoController != null) khoController.loadDataToView(); 
             
             if(hoaDonController != null) hoaDonController.loadData();
 

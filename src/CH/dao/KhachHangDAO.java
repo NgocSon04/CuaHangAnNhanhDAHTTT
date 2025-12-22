@@ -20,7 +20,7 @@ public class KhachHangDAO {
                 KhachHang kh = new KhachHang();
                 kh.setMaKH(rs.getString("MaKH"));
                 kh.setTenKH(rs.getString("TenKH"));
-                kh.setTheLoai(rs.getString("TheLoai")); // [MỚI]
+                kh.setTheLoai(rs.getString("TheLoai"));
                 kh.setGioiTinh(rs.getString("GioiTinh"));
                 kh.setEmail(rs.getString("Email"));
                 kh.setSoDienThoai(rs.getString("SoDienThoai"));

@@ -29,12 +29,11 @@ public class TrangChuController {
     private void loadStatistics() {
         try {
             // --- LẤY SỐ LIỆU TỪ DB ---
-            // Lưu ý: Đảm bảo HoaDonDAO có hàm sumAllTongTien() và KhachHangDAO có hàm countAll()
             double tongDoanhThu = hoaDonDAO.sumAllTongTien();
             int soHD = hoaDonDAO.countAll();
             int soKhach = khachHangDAO.countAll();
             
-            // [ĐÃ MỞ LẠI] Đếm số món ăn (Vì ThucDonDAO đã có hàm countAll)
+            // Đếm số món ăn
             int soMon = thucDonDAO.countAll(); 
 
             // --- ĐỊNH DẠNG ---

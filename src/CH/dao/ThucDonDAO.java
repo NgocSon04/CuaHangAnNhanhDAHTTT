@@ -103,7 +103,7 @@ public class ThucDonDAO {
         return newID;
     }
 
-    // 6. [MỚI THÊM] Đếm tổng số món ăn (Dùng cho Trang Chủ)
+    // 6. Đếm tổng số món ăn (Dùng cho Trang Chủ)
     public int countAll() {
         int count = 0;
         try {

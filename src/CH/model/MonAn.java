@@ -5,8 +5,8 @@ public class MonAn {
     private String tenMon;
     private double donGia;
     private String donViTinh;
-    private String maHH;    // Để liên kết với Kho
-    private String hinhAnh; // Để hiển thị ảnh
+    private String maHH;    
+    private String hinhAnh;
 
     public MonAn() {
     }

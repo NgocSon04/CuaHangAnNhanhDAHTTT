@@ -82,7 +82,7 @@ public class LoginForm extends JFrame {
         btnLogin.setPreferredSize(new Dimension(150, 40));
         btnLogin.setFocusPainted(false); // Bỏ viền focus khi click
         
-        // Thêm hiệu ứng hover nhẹ (Optional: tạo class riêng cho nút bấm nếu cần)
+        // Thêm hiệu ứng hover nhẹ
         ActionListener originalAction = e -> performLogin();
         btnLogin.addActionListener(originalAction);
 

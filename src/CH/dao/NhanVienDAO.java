@@ -148,4 +148,26 @@ public class NhanVienDAO {
         }
         return newID;
     }
+
+    public String login(String username, String password) { // Tham số là username, password
+        String role = null;
+        String sql = "SELECT Role FROM NhanVien WHERE Username=? AND Password=?";
+        try {
+            Connection cons = DBConnection.getConnection();
+            PreparedStatement ps = cons.prepareStatement(sql);
+            // SỬA LẠI TÊN BIẾN CHO KHỚP VỚI THAM SỐ
+            ps.setString(1, username); 
+            ps.setString(2, password);
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                role = rs.getString("Role");
+            }
+            ps.close();
+            cons.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return role;
+    }
 }

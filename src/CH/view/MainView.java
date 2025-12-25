@@ -17,10 +17,12 @@ public class MainView extends JFrame {
     private final Color SIDEBAR_COLOR = new Color(0, 91, 110);
     private final Color HOVER_COLOR   = new Color(0, 120, 145);
     private final Color ACCENT_RED    = new Color(255, 77, 77);
+    private final Color LOGOUT_COLOR  = new Color(220, 53, 69); // Màu đỏ cho nút đăng xuất
 
     private CardLayout cardLayout;
     private JPanel pnlContent;
     private JLabel lblRole;
+    private JLabel lblUser;
 
     private final Map<String, JButton> menuButtons = new HashMap<>();
 
@@ -55,7 +57,7 @@ public class MainView extends JFrame {
     }
 
     // ======================
-    // HEADER
+    // HEADER 
     // ======================
     private void initHeader() {
         JPanel pnlHeader = new JPanel(new BorderLayout());
@@ -66,14 +68,67 @@ public class MainView extends JFrame {
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblTitle.setForeground(SIDEBAR_COLOR);
 
-        JPanel pnlUser = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        pnlUser.setBackground(Color.WHITE);
-        pnlUser.add(new JLabel("Xin chào, Admin"));
+        JPanel pnlRight = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
+        pnlRight.setBackground(Color.WHITE);
+
+        lblUser = new JLabel("Xin chào, Vui lòng đăng nhập"); 
+        lblUser.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        // --- TÙY CHỈNH NÚT ĐĂNG XUẤT NỔI BẬT ---
+        JButton btnLogout = new JButton(" Đăng xuất ");
+        btnLogout.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnLogout.setBackground(LOGOUT_COLOR); // Nền đỏ
+        btnLogout.setForeground(Color.WHITE);  // Chữ trắng
+        btnLogout.setFocusPainted(false);
+        btnLogout.setBorderPainted(false);      // Tắt viền mặc định để màu nền phẳng đẹp hơn
+        btnLogout.setOpaque(true);             // Đảm bảo hiển thị màu nền trên MacOS/Linux
+        btnLogout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        // Hiệu ứng Hover cho nút Đăng xuất
+        btnLogout.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnLogout.setBackground(new Color(200, 35, 51)); // Đỏ đậm hơn khi di chuột
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnLogout.setBackground(LOGOUT_COLOR); // Quay lại màu đỏ ban đầu
+            }
+        });
+
+        btnLogout.addActionListener(e -> handleLogout());
+        
+
+        pnlRight.add(lblUser);
+        pnlRight.add(btnLogout);
 
         pnlHeader.add(lblTitle, BorderLayout.WEST);
-        pnlHeader.add(pnlUser, BorderLayout.EAST);
+        pnlHeader.add(pnlRight, BorderLayout.EAST);
 
         add(pnlHeader, BorderLayout.NORTH);
+    }
+
+    // Hàm xử lý đăng xuất và quay về trang Login
+    private void handleLogout() {
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Bạn có chắc chắn muốn đăng xuất không?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // 1. Đóng MainView
+            this.dispose();
+
+            // 2. Mở lại Login với Controller
+            java.awt.EventQueue.invokeLater(() -> {
+                LoginView loginView = new LoginView();
+                new LoginController(loginView); // KÍCH HOẠT CONTROLLER TẠI ĐÂY
+                loginView.setVisible(true);
+            });
+        }
     }
 
     // ======================
@@ -83,6 +138,7 @@ public class MainView extends JFrame {
         cardLayout = new CardLayout();
         pnlContent = new JPanel(cardLayout);
 
+        // 1. Khởi tạo các View
         trangChuView  = new TrangChuView();
         datMonView    = new DatMonView();
         thucDonView   = new ThucDonView();
@@ -92,10 +148,32 @@ public class MainView extends JFrame {
         khoView       = new KhoView();
         doanhThuView  = new DoanhThuView();
 
+        // 2. Khởi tạo các Controller (QUAN TRỌNG: Phải khởi tạo thì mới load dữ liệu)
+        
+        // -- Các Controller độc lập --
         new TrangChuController(trangChuView);
-        new KhoController(khoView);
         new DoanhThuController(doanhThuView);
+        new NhanVienController(nhanVienView);   // <--- Mới thêm
+        new KhachHangController(khachHangView); // <--- Mới thêm
 
+        // -- Các Controller có liên quan lẫn nhau (Cần đúng thứ tự) --
+        
+        // B1: Tạo Hóa Đơn & Kho trước
+        HoaDonController hoaDonController = new HoaDonController(hoaDonView);
+        KhoController khoController = new KhoController(khoView);
+
+        // B2: Tạo Đặt Món (Cần Hóa Đơn để xử lý thanh toán)
+        DatMonController datMonController = new DatMonController(datMonView, hoaDonController);
+        // Gán Kho cho Đặt món để cập nhật lại kho sau khi bán
+        datMonController.setKhoController(khoController); 
+
+        // B3: Tạo Thực Đơn (Cần Đặt Món để reload lại menu khi thêm/sửa món)
+        ThucDonController thucDonController = new ThucDonController(thucDonView, datMonController);
+        
+        // B4: Gán ngược lại Thực đơn cho Kho (để load ComboBox mã hàng)
+        khoController.setThucDonController(thucDonController);
+
+        // 3. Thêm View vào Panel
         pnlContent.add(trangChuView,  "Trang chủ");
         pnlContent.add(datMonView,    "Đặt Món");
         pnlContent.add(thucDonView,   "Thực đơn");
@@ -163,7 +241,7 @@ public class MainView extends JFrame {
             if ("Thoát".equals(text)) {
                 if (JOptionPane.showConfirmDialog(
                         this,
-                        "Bạn có muốn thoát không?",
+                        "Bạn có muốn thoát chương trình không?",
                         "Xác nhận",
                         JOptionPane.YES_NO_OPTION
                 ) == JOptionPane.YES_OPTION) {
@@ -203,9 +281,13 @@ public class MainView extends JFrame {
 
         if (path == null) return null;
 
-        Image img = new ImageIcon(getClass().getResource(path))
-                .getImage().getScaledInstance(22, 22, Image.SCALE_SMOOTH);
-        return new ImageIcon(img);
+        try {
+            Image img = new ImageIcon(getClass().getResource(path))
+                    .getImage().getScaledInstance(22, 22, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private void updateActiveButton(String active) {
@@ -226,6 +308,9 @@ public class MainView extends JFrame {
             hideMenu("Nhân viên");
             hideMenu("Kho");
             hideMenu("Doanh thu");
+        }
+        if (role != null) {
+            lblUser.setText("Xin chào, " + role); 
         }
     }
 

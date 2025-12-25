@@ -1,7 +1,6 @@
 package CH.view;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -9,6 +8,7 @@ import CH.model.NhanVien;
 import com.toedter.calendar.JDateChooser;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.event.DocumentListener;
 
 public class NhanVienView extends JPanel {
 
@@ -226,4 +226,15 @@ public class NhanVienView extends JPanel {
     public void addSuaListener(ActionListener al) { btnSua.addActionListener(al); }
     public void addXoaListener(ActionListener al) { btnXoa.addActionListener(al); }
     public void addResetListener(ActionListener al) { btnReset.addActionListener(al); }
+    public String getTuKhoaTimKiem() {
+        return txtTimKiem.getText().trim();
+    }
+    
+    public void addTimKiemListener(ActionListener al) {
+        btnTimKiem.addActionListener(al);
+        txtTimKiem.addActionListener(al);
+    }
+    public void addLiveSearchListener(DocumentListener dl) {
+        txtTimKiem.getDocument().addDocumentListener(dl);
+    }
 }

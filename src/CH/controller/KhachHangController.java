@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class KhachHangController {
     
@@ -28,6 +30,22 @@ public class KhachHangController {
             view.clearForm();
             KhachHang kh = view.getKhachHangInfo();
             if(kh != null) kh.setMaKH("Tự động sinh"); 
+        });
+        view.addLiveSearchListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                xuLyTimKiem(); // Gọi tìm kiếm khi gõ thêm chữ
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                xuLyTimKiem(); // Gọi tìm kiếm khi xóa chữ
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                xuLyTimKiem(); // Gọi khi thay đổi thuộc tính (ít dùng nhưng cứ để)
+            }
         });
         
         view.addTableSelectionListener(e -> {
@@ -53,7 +71,7 @@ public class KhachHangController {
         });
     }
 
-    private void loadDataToView() {
+    public void loadDataToView() {
         view.clearTable();
         List<KhachHang> list = khachHangDAO.getAll(); 
         for (KhachHang kh : list) {
@@ -82,6 +100,10 @@ public class KhachHangController {
         String phoneRegex = "^0\\d{9}$";
         if (!Pattern.matches(phoneRegex, kh.getSoDienThoai())) {
             JOptionPane.showMessageDialog(view, "Số điện thoại không hợp lệ!");
+            return false;
+        }
+        if (kh.getDiaChi().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(view, "Địa chỉ không được để trống!");
             return false;
         }
 
@@ -148,5 +170,22 @@ public class KhachHangController {
                 JOptionPane.showMessageDialog(view, "Vui lòng chọn khách hàng để xóa!");
             }
         }
+    }
+    private void xuLyTimKiem() {
+        String keyword = view.getTuKhoaTimKiem();
+        List<KhachHang> list;
+
+        if (keyword.isEmpty()) {
+            list = khachHangDAO.getAll(); // Nếu rỗng thì load hết
+        } else {
+            list = khachHangDAO.search(keyword); // Gọi hàm search mới viết
+        }
+
+        // Cập nhật bảng
+        view.clearTable();
+        for (KhachHang kh : list) {
+            view.addRowToTable(kh);
+        }
+
     }
 }

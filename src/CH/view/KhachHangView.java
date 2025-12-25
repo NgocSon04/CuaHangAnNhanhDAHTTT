@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import CH.model.KhachHang; 
+import javax.swing.event.DocumentListener;
 
 public class KhachHangView extends JPanel {
 
@@ -152,7 +153,7 @@ public class KhachHangView extends JPanel {
         );
     }
 
-    // [QUAN TRỌNG] Sửa tham số đầu vào là KhachHang
+    
     public void fillForm(KhachHang kh) {
         txtMaKH.setText(kh.getMaKH());
         txtTenKH.setText(kh.getTenKH());
@@ -200,4 +201,17 @@ public class KhachHangView extends JPanel {
     public void addSuaListener(ActionListener al) { btnSua.addActionListener(al); }
     public void addXoaListener(ActionListener al) { btnXoa.addActionListener(al); }
     public void addResetListener(ActionListener al) { btnReset.addActionListener(al); }
+    public String getTuKhoaTimKiem() {
+        return txtTimKiem.getText().trim();
+    }
+    
+    public void addTimKiemListener(ActionListener al) {
+        btnTimKiem.addActionListener(al);
+        // Hỗ trợ nhấn Enter trong ô tìm kiếm
+        txtTimKiem.addActionListener(al); 
+    }
+    public void addLiveSearchListener(DocumentListener dl) {
+        // Lắng nghe sự thay đổi của văn bản bên trong ô txtTimKiem
+        txtTimKiem.getDocument().addDocumentListener(dl);
+    }
 }

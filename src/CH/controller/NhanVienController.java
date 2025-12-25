@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class NhanVienController {
     
@@ -31,6 +33,14 @@ public class NhanVienController {
         view.addResetListener(e -> {
             view.clearForm();
             view.setMaNV("Tự động sinh"); 
+        });
+        view.addLiveSearchListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { xuLyTimKiem(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { xuLyTimKiem(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { xuLyTimKiem(); }
         });
         
         // 3. Sự kiện click vào bảng (SỬA LẠI ĐỂ TRÁNH LỖI NULL)
@@ -182,5 +192,26 @@ public class NhanVienController {
                 JOptionPane.showMessageDialog(view, "Vui lòng chọn nhân viên để xóa!");
             }
         }
+    }
+    private void xuLyTimKiem() {
+        String keyword = view.getTuKhoaTimKiem();
+        DefaultTableModel model = (DefaultTableModel) view.getTable().getModel();
+        model.setRowCount(0);
+
+        List<NhanVien> list;
+        if (keyword.isEmpty()) {
+            list = nhanVienDAO.getAll();
+        } else {
+            list = nhanVienDAO.search(keyword);
+        }
+
+        for (NhanVien nv : list) {
+            model.addRow(new Object[]{
+                nv.getMaNV(), nv.getTenNV(), nv.getNgaySinh(), nv.getGioiTinh(),
+                nv.getChucVu(), nv.getSoDienThoai(), nv.getDiaChi(),
+                nv.getUsername(), nv.getRole()
+            });
+        }
+        
     }
 }

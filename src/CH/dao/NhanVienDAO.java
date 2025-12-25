@@ -170,4 +170,37 @@ public class NhanVienDAO {
         }
         return role;
     }
+    // Thêm vào NhanVienDAO
+    public List<NhanVien> search(String keyword) {
+        List<NhanVien> list = new ArrayList<>();
+        // Tìm theo Tên hoặc Mã NV
+        String sql = "SELECT * FROM NhanVien WHERE TenNV LIKE ? OR MaNV LIKE ?";
+        try {
+            Connection cons = DBConnection.getConnection();
+            PreparedStatement ps = cons.prepareStatement(sql);
+            String query = "%" + keyword + "%";
+            ps.setString(1, query);
+            ps.setString(2, query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                NhanVien nv = new NhanVien();
+                nv.setMaNV(rs.getString("MaNV"));
+                nv.setTenNV(rs.getString("TenNV"));
+                nv.setNgaySinh(rs.getString("NgaySinh"));
+                nv.setGioiTinh(rs.getString("GioiTinh"));
+                nv.setChucVu(rs.getString("ChucVu"));
+                nv.setSoDienThoai(rs.getString("SoDienThoai"));
+                nv.setDiaChi(rs.getString("DiaChi"));
+                nv.setUsername(rs.getString("Username"));
+                nv.setPassword(rs.getString("Password"));
+                nv.setRole(rs.getString("Role"));
+                list.add(nv);
+            }
+            ps.close();
+            cons.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

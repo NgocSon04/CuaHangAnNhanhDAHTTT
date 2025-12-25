@@ -135,4 +135,34 @@ public class KhachHangDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return count;
     }
+    // Thêm vào KhachHangDAO
+    public List<KhachHang> search(String keyword) {
+        List<KhachHang> list = new ArrayList<>();
+        // Tìm theo Tên hoặc SĐT
+        String sql = "SELECT * FROM KhachHang WHERE TenKH LIKE ? OR SoDienThoai LIKE ?";
+        try {
+            Connection cons = DBConnection.getConnection();
+            PreparedStatement ps = cons.prepareStatement(sql);
+            String query = "%" + keyword + "%";
+            ps.setString(1, query);
+            ps.setString(2, query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                KhachHang kh = new KhachHang();
+                kh.setMaKH(rs.getString("MaKH"));
+                kh.setTenKH(rs.getString("TenKH"));
+                kh.setTheLoai(rs.getString("TheLoai"));
+                kh.setGioiTinh(rs.getString("GioiTinh"));
+                kh.setEmail(rs.getString("Email"));
+                kh.setSoDienThoai(rs.getString("SoDienThoai"));
+                kh.setDiaChi(rs.getString("DiaChi"));
+                list.add(kh);
+            }
+            ps.close();
+            cons.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

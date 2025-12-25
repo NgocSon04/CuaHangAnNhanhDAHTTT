@@ -153,17 +153,20 @@ public class MainView extends JFrame {
         // -- Các Controller độc lập --
         new TrangChuController(trangChuView);
         new DoanhThuController(doanhThuView);
-        new NhanVienController(nhanVienView);   // <--- Mới thêm
-        new KhachHangController(khachHangView); // <--- Mới thêm
+        new NhanVienController(nhanVienView);   
+        
 
         // -- Các Controller có liên quan lẫn nhau (Cần đúng thứ tự) --
         
         // B1: Tạo Hóa Đơn & Kho trước
         HoaDonController hoaDonController = new HoaDonController(hoaDonView);
         KhoController khoController = new KhoController(khoView);
-
+        KhachHangController khachHangController = new KhachHangController(khachHangView);
+        
         // B2: Tạo Đặt Món (Cần Hóa Đơn để xử lý thanh toán)
         DatMonController datMonController = new DatMonController(datMonView, hoaDonController);
+        datMonController.setKhoController(khoController);
+        datMonController.setKhachHangController(khachHangController);
         // Gán Kho cho Đặt món để cập nhật lại kho sau khi bán
         datMonController.setKhoController(khoController); 
 
@@ -172,6 +175,10 @@ public class MainView extends JFrame {
         
         // B4: Gán ngược lại Thực đơn cho Kho (để load ComboBox mã hàng)
         khoController.setThucDonController(thucDonController);
+        
+        
+        
+        
 
         // 3. Thêm View vào Panel
         pnlContent.add(trangChuView,  "Trang chủ");

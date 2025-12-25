@@ -22,6 +22,8 @@ public class DatMonController {
     private double currentTotal = 0;
     private HoaDonController hoaDonController;
     private KhoController khoController;
+    private KhachHangDAO khachHangDAO;
+    private KhachHangController khachHangController;
     
     public DatMonController(DatMonView view, HoaDonController hoaDonController) {
         this.view = view;
@@ -29,6 +31,7 @@ public class DatMonController {
         this.menuDao = new ThucDonDAO();
         this.hoaDonDao = new HoaDonDAO();
         this.khoDao = new KhoDAO();
+        this.khachHangDAO = new KhachHangDAO();
         
         // Gọi hàm load menu ngay khi mở
         loadMenu();
@@ -174,33 +177,90 @@ public class DatMonController {
 
     private void moPopupThanhToan() {
         if (view.getModelGioHang().getRowCount() == 0) { 
-            javax.swing.JOptionPane.showMessageDialog(view, "Giỏ hàng đang trống!");
+            JOptionPane.showMessageDialog(view, "Giỏ hàng đang trống!");
             return;
         }
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(view);
         XacNhanThanhToanDialog dialog = new XacNhanThanhToanDialog(parent, view.getModelGioHang(), currentTotal);
+        
         dialog.addXacNhanListener(e -> {
-            luuHoaDonVaoDB(dialog.getTenKhach());
+            String tenKhach = dialog.getTenKhach();
+            String sdt = dialog.getSDT();
+            
+            if (tenKhach.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập tên khách hàng!");
+                return;
+            }
+            
+            // Gọi hàm lưu với đầy đủ thông tin
+            luuHoaDonVaoDB(tenKhach, sdt); 
             dialog.dispose();
         });
         dialog.setVisible(true);
     }
 
-    private void luuHoaDonVaoDB(String tenKhach) {
+    private void luuHoaDonVaoDB(String tenKhach, String sdt) {
         java.sql.Connection conn = null;
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); // Bắt đầu Transaction
 
-            // 1. Lưu Hóa Đơn
+            // =================================================================
+            // 1. LOGIC TỰ ĐỘNG LƯU KHÁCH HÀNG
+            // =================================================================
+            String maKH = null; 
+            
+            if (!sdt.isEmpty()) {
+                // A. Kiểm tra xem SĐT này đã có chưa
+                String sqlCheck = "SELECT MaKH, TenKH FROM KhachHang WHERE SoDienThoai = ?";
+                PreparedStatement psCheck = conn.prepareStatement(sqlCheck);
+                psCheck.setString(1, sdt);
+                java.sql.ResultSet rsCheck = psCheck.executeQuery();
+                
+                if (rsCheck.next()) {
+                    // Đã tồn tại -> Lấy MaKH cũ
+                    maKH = rsCheck.getString("MaKH");
+                    // (Tùy chọn: Có thể cập nhật lại tên khách nếu muốn)
+                } else {
+                    // Chưa tồn tại -> Thêm mới vào bảng KhachHang
+                    
+                    // Sinh mã KH mới (Gọi DAO hoặc tự sinh trong transaction)
+                    // Ở đây gọi DAO để lấy ID mới nhất cho an toàn
+                    String newMaKH = new KhachHangDAO().getNewID(); 
+                    
+                    String sqlInsertKH = "INSERT INTO KhachHang(MaKH, TenKH, TheLoai, GioiTinh, Email, SoDienThoai, DiaChi) " +
+                                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement psKH = conn.prepareStatement(sqlInsertKH);
+                    psKH.setString(1, newMaKH);
+                    psKH.setString(2, tenKhach);
+                    psKH.setString(3, "Vãng lai"); // Mặc định
+                    psKH.setString(4, "Khác");     // Mặc định
+                    psKH.setString(5, "");         // Email trống
+                    psKH.setString(6, sdt);
+                    psKH.setString(7, "");         // Địa chỉ trống
+                    
+                    psKH.executeUpdate();
+                    maKH = newMaKH;
+                }
+            }
+
+            // =================================================================
+            // 2. LƯU HÓA ĐƠN (Giữ nguyên logic cũ)
+            // =================================================================
             String maHD = hoaDonDao.getNewID();
             String ngayLap = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+            
+            // Lưu ý: Nếu bảng HoaDon của bạn chưa có cột MaKH, bạn vẫn lưu TenKH như cũ.
+            // Nếu bảng HoaDon đã có cột MaKH, bạn hãy setString cho cột đó bằng biến maKH ở trên.
+            
             HoaDon hd = new HoaDon(maHD, "Admin", tenKhach, ngayLap, currentTotal);
             hoaDonDao.add(hd);
 
-            // 2. Lưu Chi Tiết & Trừ Kho
-            String sql = "INSERT INTO ChiTietHoaDon(MaHD, TenMon, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            // =================================================================
+            // 3. LƯU CHI TIẾT & TRỪ KHO (Giữ nguyên logic cũ)
+            // =================================================================
+            String sqlChiTiet = "INSERT INTO ChiTietHoaDon(MaHD, TenMon, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
+            PreparedStatement psChiTiet = conn.prepareStatement(sqlChiTiet);
             DefaultTableModel model = view.getModelGioHang();
             
             for (int i = 0; i < model.getRowCount(); i++) {
@@ -209,43 +269,41 @@ public class DatMonController {
                 double donGia = Double.parseDouble(model.getValueAt(i, 3).toString().replace(",", "").replace(".", ""));
                 String maHH = model.getValueAt(i, 5).toString();
 
-                ps.setString(1, maHD);
-                ps.setString(2, tenMon);
-                ps.setInt(3, soLuong);
-                ps.setDouble(4, donGia);
-                ps.executeUpdate();
+                psChiTiet.setString(1, maHD);
+                psChiTiet.setString(2, tenMon);
+                psChiTiet.setInt(3, soLuong);
+                psChiTiet.setDouble(4, donGia);
+                psChiTiet.executeUpdate();
 
                 khoDao.truKho(conn, maHH, soLuong);
             }
             
-            conn.commit(); 
+            conn.commit(); // Xác nhận Transaction thành công
             
-            JOptionPane.showMessageDialog(view, "Thanh toán thành công! Mã HĐ: " + maHD);
+            JOptionPane.showMessageDialog(view, "Thanh toán thành công! Mã HĐ: " + maHD + 
+                    (maKH != null ? "\nĐã liên kết khách hàng: " + tenKhach : ""));
+            
+            // Reset giao diện
             view.getModelGioHang().setRowCount(0);
             updateTongTien();
-            if(khoController != null) khoController.loadDataToView(); 
             
+            // Cập nhật các màn hình khác (Real-time update)
+            if(khoController != null) khoController.loadDataToView();
             if(hoaDonController != null) hoaDonController.loadData();
+            if(khachHangController != null) {
+                khachHangController.loadDataToView(); 
+            }
+
 
         } catch (Exception ex) {
-            try {
-                if(conn != null) conn.rollback(); 
-            } catch(Exception e) {}
-            
+            try { if(conn != null) conn.rollback(); } catch(Exception e) {}
             ex.printStackTrace();
             JOptionPane.showMessageDialog(view, "Lỗi thanh toán: " + ex.getMessage());
         } finally {
-
-            try { 
-                if(conn != null) { 
-                    conn.setAutoCommit(true); 
-                    conn.close(); 
-                } 
-            } catch(Exception e) { 
-                e.printStackTrace();
-            }
+            try { if(conn != null) { conn.setAutoCommit(true); conn.close(); } } catch(Exception e) {}
         }
     }
+
 
     private void tinhLaiTienMotDong(int row) {
         if (row < 0) return;
@@ -280,5 +338,8 @@ public class DatMonController {
         } catch (Exception e) { 
             JOptionPane.showMessageDialog(view, "Nhập số nguyên!"); 
         }
+    }
+    public void setKhachHangController(KhachHangController controller) {
+        this.khachHangController = controller;
     }
 }

@@ -2,6 +2,7 @@ package CH.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet; // <--- BẮT BUỘC PHẢI CÓ DÒNG NÀY
 import java.sql.Statement;
 
 public class DBConnection {
@@ -58,6 +59,8 @@ public class DBConnection {
                     + "Role VARCHAR(20)"        
                     + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
             dbStmt.executeUpdate(sqlCreateNhanVien);
+
+            // (ĐÃ XÓA ĐOẠN INSERT ADMIN01 THỪA Ở ĐÂY ĐỂ TRÁNH LỖI)
             
             // Tạo bảng KhachHang
             String sqlCreateKhachHang = "CREATE TABLE IF NOT EXISTS KhachHang ("
@@ -81,7 +84,7 @@ public class DBConnection {
                     + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
             dbStmt.executeUpdate(sqlCreateKho);
 
-            // Tạo bảng ThucDon (Đã thêm HinhAnh)
+            // Tạo bảng ThucDon
             String sqlCreateThucDon = "CREATE TABLE IF NOT EXISTS ThucDon ("
                     + "MaMon VARCHAR(20) NOT NULL PRIMARY KEY,"
                     + "TenMon VARCHAR(100),"
@@ -112,7 +115,45 @@ public class DBConnection {
                     + "CONSTRAINT fk_hoadon FOREIGN KEY (MaHD) REFERENCES HoaDon(MaHD) ON DELETE CASCADE"
                     + ") CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
             dbStmt.executeUpdate(sqlCreateChiTiet);
+
+            // --------------------------------------------------------
+            // 3. THÊM DỮ LIỆU MẪU (CHỈ CHẠY KHI BẢNG RỖNG)
+            // --------------------------------------------------------
             
+            // a) Thêm Admin và Nhân viên
+            String sqlCheckNV = "SELECT COUNT(*) FROM NhanVien";
+            ResultSet rsNV = dbStmt.executeQuery(sqlCheckNV);
+            if (rsNV.next() && rsNV.getInt(1) == 0) {
+                // Admin: admin/123
+                dbStmt.executeUpdate("INSERT INTO NhanVien VALUES ('NV01', 'Quản Trị Viên', '01/01/1990', 'Nam', 'Quản lý', '0901234567', 'Hà Nội', 'admin', '123', 'ADMIN')");
+                // Staff: staff/123
+                dbStmt.executeUpdate("INSERT INTO NhanVien VALUES ('NV02', 'Nhân Viên A', '05/05/2000', 'Nữ', 'Thu ngân', '0909876543', 'TPHCM', 'staff', '123', 'NHÂN VIÊN')");
+                System.out.println("-> Da them user mau: admin/123 va staff/123");
+            }
+            rsNV.close();
+
+            // b) Thêm Hàng hóa vào Kho (Để có cái mà bán)
+            String sqlCheckKho = "SELECT COUNT(*) FROM Kho";
+            ResultSet rsKho = dbStmt.executeQuery(sqlCheckKho);
+            if (rsKho.next() && rsKho.getInt(1) == 0) {
+                dbStmt.executeUpdate("INSERT INTO Kho VALUES ('HH01', 'Gà tươi', 100, 50000, 0)");
+                dbStmt.executeUpdate("INSERT INTO Kho VALUES ('HH02', 'Khoai tây', 200, 10000, 0)");
+                dbStmt.executeUpdate("INSERT INTO Kho VALUES ('HH03', 'Cocacola', 300, 8000, 0)");
+                System.out.println("-> Da them du lieu mau Kho");
+            }
+            rsKho.close();
+
+            // c) Thêm Thực đơn (Liên kết với Kho)
+            String sqlCheckMenu = "SELECT COUNT(*) FROM ThucDon";
+            ResultSet rsMenu = dbStmt.executeQuery(sqlCheckMenu);
+            if (rsMenu.next() && rsMenu.getInt(1) == 0) {
+                dbStmt.executeUpdate("INSERT INTO ThucDon VALUES ('M01', 'Gà Rán Giòn', 35000, 'Cái', 'HH01', '')");
+                dbStmt.executeUpdate("INSERT INTO ThucDon VALUES ('M02', 'Khoai Tây Chiên', 25000, 'Suất', 'HH02', '')");
+                dbStmt.executeUpdate("INSERT INTO ThucDon VALUES ('M03', 'Nước Ngọt', 15000, 'Lon', 'HH03', '')");
+                System.out.println("-> Da them du lieu mau Thuc Don");
+            }
+            rsMenu.close();
+
             System.out.println("Khoi tao Database thanh cong!");
             
             dbStmt.close();
@@ -123,4 +164,6 @@ public class DBConnection {
             System.err.println("Loi ket noi hoac khoi tao Database!");
         }
     }
+    
+  
 }
